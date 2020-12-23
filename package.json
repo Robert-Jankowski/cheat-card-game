@@ -4,5 +4,9 @@
   "main": "index.js",
   "repository": "https://github.com/Robert-Jankowski/cheat-card-game.git",
   "author": "Robert <robert.jankowski.kontakt@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mqtt": "^4.2.6"
+  }
 }
