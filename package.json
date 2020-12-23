@@ -1,0 +1,8 @@
+{
+  "name": "cheat-card-game",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Robert-Jankowski/cheat-card-game.git",
+  "author": "Robert <robert.jankowski.kontakt@gmail.com>",
+  "license": "MIT"
+}
