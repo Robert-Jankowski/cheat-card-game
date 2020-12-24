@@ -3,6 +3,8 @@ const {v4: uuid} = require('uuid')
 const {Game} = require('./classes/Game')
 const {Database} = require('./classes/Database')
 const {Player} = require('./classes/Player')
+const shuffle = require('./helpers/shuffle')
+const deck = require('./helpers/deck')
 const brokerAddress = "10.45.3.187:1883"
 const client  = mqtt.connect(`mqtt://${brokerAddress}`)
 
@@ -29,7 +31,7 @@ client.on('connect', function () {
 function createGame(player_id) {
   const id = uuid()
   const player = db.players.find(n => n.id === player_id)
-  const game = new Game(id, player)
+  const game = new Game(id, player, shuffle(deck))
   db.createGame(game)
 }
 
