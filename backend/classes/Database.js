@@ -3,7 +3,7 @@ function Database() {
     this.players = []
 
     this.createGame = (game) => {
-        this.games.append(game)
+        this.games.push(game)
     }
 }
 exports.Database = Database

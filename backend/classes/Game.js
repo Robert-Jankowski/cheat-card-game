@@ -6,7 +6,7 @@ function Game(id, player, deck) {
 
     this.join = (player) => {
         if(this.status !== 'ingame')
-            this.players.append(player)
+            this.players.push(player)
     }
     this.move = (player, cards) => {
         if(cards.length <= 4) {

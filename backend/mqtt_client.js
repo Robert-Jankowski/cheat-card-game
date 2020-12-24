@@ -39,10 +39,10 @@ function joinGame(message) {
   const [player_id, game_id] = message.split(':')
   const player = db.players.find(n => n.id === player_id)
   const game = db.games.find(n => n.id === game_id)
-  game.players.append(player)
+  game.players.push(player)
 }
 function createPlayer(nick) {
   const id = uuid()
   const player = new Player(nick, id)
-  db.players.append(player)
+  db.players.push(player)
 }
