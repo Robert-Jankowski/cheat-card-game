@@ -11,8 +11,9 @@ function Game(id, player, deck) {
             this.players.push(player)
     }
     this.move = (playerIndex, cards) => {
-        if(cards.length <= 4 && this.turn === playerIndex ) {
-            this.pile = [...this.pile, ...cards]
+        //cards verification in frontend
+        if(this.status === 'ingame' && cards.length <= 4 && this.turn === playerIndex ) {
+            this.pile = [...cards, ...this.pile]
             this.players[playerIndex].hand = this.players[playerIndex].hand.filter(n => !cards.includes(n))
             this.turn = this.turn + 1 < this.players.length - 1 ? this.turn + 1 : 0
         }
