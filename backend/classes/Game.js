@@ -44,11 +44,14 @@ function Game(id, player, deck) {
     }
     this.check = (playerIndex) => {
         if(this.declared.number !== null) {
-            const cardsToCheck = [...this.pile.splice(0, this.declared.number)]
-            if(cardsToCheck.every(n => n.split(':')[1] === this.declared.value))
+            const cardsToCheck = [...this.pile.slice(0, this.declared.number)]
+            if(cardsToCheck.every(n => n.split(':')[1] === this.declared.value)) {
                 this.draw(playerIndex, this.pile.length)
-            else
+            }
+            else {
                 this.draw(this.declared.player, this.pile.length)
+            }
+            this.declared = {value: '2', number: null, player: null}
         } 
     }
 }
