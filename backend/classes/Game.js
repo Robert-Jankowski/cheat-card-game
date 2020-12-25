@@ -10,11 +10,11 @@ function Game(id, player, deck) {
         if(this.status !== 'ingame')
             this.players.push(player)
     }
-    this.move = (player, cards) => {
-        if(cards.length <= 4 && this.turn === player) {
+    this.move = (playerIndex, cards) => {
+        if(cards.length <= 4 && this.turn === playerIndex ) {
             this.pile = [...this.pile, ...cards]
-            player.hand = player.hand.filter(n => !cards.includes(n))
-            this.turn = this.turn + 1 < this.players.length - 1 ? this.turn + 1 : 0 
+            this.players[playerIndex].hand = this.players[playerIndex].hand.filter(n => !cards.includes(n))
+            this.turn = this.turn + 1 < this.players.length - 1 ? this.turn + 1 : 0
         }
     }
     this.start = () => {
@@ -23,7 +23,7 @@ function Game(id, player, deck) {
         this.deck.map((n,i) => this.players[i%this.players.length].hand.push(n))
         const firstPlayerIndex = this.players.findIndex(n => n.hand.includes("hearts:2"))
         this.turn = firstPlayerIndex
-        this.move(firstPlayer, ["hearts:2"])
+        this.move(firstPlayerIndex, ["hearts:2"])
     }
 }
 exports.Game = Game
