@@ -3,6 +3,7 @@ function Game(id, player, deck) {
     this.players = [player]
     this.deck = deck
     this.status = 'waiting'
+    this.pile = []
 
     this.join = (player) => {
         if(this.status !== 'ingame')
@@ -17,7 +18,6 @@ function Game(id, player, deck) {
     this.start = () => {
         this.players = this.players.map(n => ({...n, hand:[]}))
         this.deck.map((n,i) => this.players[i%players.length].hand.push(n))
-        this.pile = []
         const firstPlayer = this.players.find(n => n.hand.includes("hearts:2"))
         this.move(firstPlayer, ["hearts:2"])
     }

@@ -24,8 +24,8 @@ test('correct player values', () => {
 })
 
 test('correct game values', () => {
-    expect({id: game.id, players: game.players, deck: game.deck, status: game.status})
-    .toEqual({id:"efgh", players: [player], deck: deck, status: 'waiting'})
+    expect({id: game.id, players: game.players, deck: game.deck, status: game.status, pile: game.pile})
+    .toEqual({id:"efgh", players: [player], deck: deck, status: 'waiting', pile: []})
 })
 
 test('join to game(players length)', () => {
