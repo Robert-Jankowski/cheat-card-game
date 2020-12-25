@@ -21,25 +21,25 @@ beforeEach(() => {
 return game = new Game("efgh",player, deck)
 })
 
-test('correct player values', () => {
+test('Player(correct values)', () => {
     expect({id: player.id, nick:player.nick}).toEqual({id: "abcd", nick:"Player"})
 })
 
-test('correct game values', () => {
+test('Game(correct values)', () => {
     expect({id: game.id, players: game.players, deck: game.deck, status: game.status, pile: game.pile})
     .toEqual({id:"efgh", players: [player], deck: deck, status: 'waiting', pile: []})
 })
-test('join to game(correct player)', () => {
+test('Game.join(correct player)', () => {
     const player2 = new Player("Player2", "ijkl")
     game.join(player2)
     expect(game.players[1]).toEqual(new Player("Player2", "ijkl"))
 })
-test('join to game(players length)', () => {
+test('Game.join(players length)', () => {
     const player2 = new Player("Player2", "ijkl")
     game.join(player2)
     expect(game.players.length).toEqual(2)
 })
-test('join to game(game started)', () => {
+test('Game.join(game started)', () => {
     const player2 = new Player("Player2", "ijkl")
     game.join(player2)
     game.start()
@@ -47,7 +47,7 @@ test('join to game(game started)', () => {
     game.join(player3)
     expect(game.players.length).toEqual(2)
 })
-test('two players hand(equal values)', () => {
+test('Player.hand(two players/equal values)', () => {
     const player2 = new Player("Player2", "ijkl")
     game.join(player2)
     game.start()
@@ -81,7 +81,7 @@ test('two players hand(equal values)', () => {
         'spades:7',   'clubs:4'
       ]])
 })
-test('divisible players hand (lengths)', () => {
+test('Player.hand(divisible players/lengths)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -92,7 +92,7 @@ test('divisible players hand (lengths)', () => {
     expect(game.players.map(n => n.hand.length)).toEqual([13,13,13,12])
 })
 
-test('indivisible players hand (lengths)', () => {
+test('Player.hand(indivisible players/lengths)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -104,7 +104,7 @@ test('indivisible players hand (lengths)', () => {
     game.start()
     expect(game.players.map(n => n.hand.length)).toEqual([11,11,9,10,10])
 })
-test('correct turn index after first move (last array index to first)', () => {
+test('Game.start(correct turn index/last to first index)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -114,7 +114,7 @@ test('correct turn index after first move (last array index to first)', () => {
     game.start()
     expect(game.turn).toEqual(0)
 })
-test('correct turn index after first move (next array index)', () => {
+test('Game.start(correct turn index/next index)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -126,7 +126,7 @@ test('correct turn index after first move (next array index)', () => {
     game.start()
     expect(game.turn).toEqual(3)
 })
-test('pile after start', () => {
+test('Game.start(start pile value)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     game.join(player2)
@@ -134,7 +134,7 @@ test('pile after start', () => {
     game.start()
     expect(game.pile[0]).toEqual("hearts:2")
 })
-test('move (1 card)', () => {
+test('Game.move(1 card)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -145,7 +145,7 @@ test('move (1 card)', () => {
     game.move(0, ["spades:3"], 3)
     expect(game.pile[0]).toEqual("spades:3")
 })
-test('move (2 cards)', () => {
+test('Game.move(2 cards)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -156,7 +156,7 @@ test('move (2 cards)', () => {
     game.move(0, ["spades:3","spades:5"], 5)
     expect([game.pile[0], game.pile[1]]).toEqual(["spades:3", "spades:5"])
 })
-test('move (4 cards)', () => {
+test('Game.move(4 cards)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -167,7 +167,7 @@ test('move (4 cards)', () => {
     game.move(0, ["spades:3","spades:5", "hearts:3", "diamonds:7"], 3)
     expect(game.pile.length).toEqual(5)
 })
-test('move (invalid number of cards)', () => {
+test('Game.move(invalid number of cards)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -178,7 +178,7 @@ test('move (invalid number of cards)', () => {
     game.move(0, ["spades:3","spades:5", "hearts:3", "diamonds:7","clubs:K"], 3)
     expect(game.pile.length).toEqual(1)
 })
-test('move (game not started)', () => {
+test('Game.move(game not started)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -188,7 +188,7 @@ test('move (game not started)', () => {
     game.move(0, ["spades:3"], 3)
     expect(game.pile.length).toEqual(0)
 })
-test('move (wrong player turn)', () => {
+test('Game.move(wrong player turn)', () => {
     const player2 = new Player("Player2", "ijkl")
     const player3 = new Player("Player3", "mnop")
     const player4 = new Player("Player4", "vcnm")
@@ -198,4 +198,16 @@ test('move (wrong player turn)', () => {
     game.start()
     game.move(1, ["spades:3"], 3)
     expect(game.pile.length).toEqual(1)
+})
+test('Game.move(declared value lower than actual)', () => {
+    const player2 = new Player("Player2", "ijkl")
+    const player3 = new Player("Player3", "mnop")
+    const player4 = new Player("Player4", "vcnm")
+    game.join(player2)
+    game.join(player3)
+    game.join(player4)
+    game.start()
+    game.move(0, ["spades:3"], 3)
+    game.move(1, ["spades:2"], 2)
+    expect(game.pile[0]).toEqual("spades:3")
 })
