@@ -27,3 +27,14 @@ test('correct game values', () => {
     expect({id: game.id, players: game.players, deck: game.deck, status: game.status})
     .toEqual({id:"efgh", players: [player], deck: deck, status: 'waiting'})
 })
+
+test('join to game(players length)', () => {
+    const player2 = new Player("Player2", "ijkl")
+    game.join(player2)
+    expect(game.players.length).toEqual(2)
+})
+test('join to game(correct player)', () => {
+    const player2 = new Player("Player2", "ijkl")
+    game.join(player2)
+    expect(game.players[1]).toEqual(new Player("Player2", "ijkl"))
+})
