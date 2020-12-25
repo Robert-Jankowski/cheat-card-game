@@ -77,7 +77,7 @@ test('two players hand(equal values)', () => {
         'spades:K',   'diamonds:K',
         'hearts:A',   'spades:2',
         'hearts:10',  'diamonds:3',
-        'clubs:A',    'hearts:2',
+        'clubs:A',
         'spades:7',   'clubs:4'
       ]])
 })
@@ -89,7 +89,7 @@ test('divisible players hand (lengths)', () => {
     game.join(player3)
     game.join(player4)
     game.start()
-    expect(game.players.map(n => n.hand.length)).toEqual([13,13,13,13])
+    expect(game.players.map(n => n.hand.length)).toEqual([13,13,13,12])
 })
 
 test('indivisible players hand (lengths)', () => {
@@ -102,5 +102,5 @@ test('indivisible players hand (lengths)', () => {
     game.join(player4)
     game.join(player5)
     game.start()
-    expect(game.players.map(n => n.hand.length)).toEqual([11,11,10,10,10])
+    expect(game.players.map(n => n.hand.length)).toEqual([11,11,9,10,10])
 })
