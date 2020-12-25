@@ -142,7 +142,7 @@ test('move (1 card)', () => {
     game.join(player3)
     game.join(player4)
     game.start()
-    game.move(0, ["spades:3"])
+    game.move(0, ["spades:3"], 3)
     expect(game.pile[0]).toEqual("spades:3")
 })
 test('move (2 cards)', () => {
@@ -153,7 +153,7 @@ test('move (2 cards)', () => {
     game.join(player3)
     game.join(player4)
     game.start()
-    game.move(0, ["spades:3","spades:5"])
+    game.move(0, ["spades:3","spades:5"], 5)
     expect([game.pile[0], game.pile[1]]).toEqual(["spades:3", "spades:5"])
 })
 test('move (4 cards)', () => {
@@ -164,7 +164,7 @@ test('move (4 cards)', () => {
     game.join(player3)
     game.join(player4)
     game.start()
-    game.move(0, ["spades:3","spades:5", "hearts:3", "diamonds:7"])
+    game.move(0, ["spades:3","spades:5", "hearts:3", "diamonds:7"], 3)
     expect(game.pile.length).toEqual(5)
 })
 test('move (invalid number of cards)', () => {
@@ -175,7 +175,7 @@ test('move (invalid number of cards)', () => {
     game.join(player3)
     game.join(player4)
     game.start()
-    game.move(0, ["spades:3","spades:5", "hearts:3", "diamonds:7","clubs:K"])
+    game.move(0, ["spades:3","spades:5", "hearts:3", "diamonds:7","clubs:K"], 3)
     expect(game.pile.length).toEqual(1)
 })
 test('move (game not started)', () => {
@@ -185,7 +185,7 @@ test('move (game not started)', () => {
     game.join(player2)
     game.join(player3)
     game.join(player4)
-    game.move(0, ["spades:3"])
+    game.move(0, ["spades:3"], 3)
     expect(game.pile.length).toEqual(0)
 })
 test('move (wrong player turn)', () => {
@@ -196,6 +196,6 @@ test('move (wrong player turn)', () => {
     game.join(player3)
     game.join(player4)
     game.start()
-    game.move(1, ["spades:3"])
+    game.move(1, ["spades:3"], 3)
     expect(game.pile.length).toEqual(1)
 })
