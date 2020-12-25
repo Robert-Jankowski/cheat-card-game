@@ -16,10 +16,11 @@ function Game(id, player, deck) {
         }
     }
     this.start = () => {
+        this.status = 'ingame'
         this.players = this.players.map(n => ({...n, hand:[]}))
-        this.deck.map((n,i) => this.players[i%players.length].hand.push(n))
-        const firstPlayer = this.players.find(n => n.hand.includes("hearts:2"))
-        this.move(firstPlayer, ["hearts:2"])
+        this.deck.map((n,i) => this.players[i%this.players.length].hand.push(n))
+        // const firstPlayer = this.players.find(n => n.hand.includes("hearts:2"))
+        // this.move(firstPlayer, ["hearts:2"])
     }
 }
 exports.Game = Game
