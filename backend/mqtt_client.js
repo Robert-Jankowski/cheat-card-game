@@ -25,12 +25,18 @@ client.on('connect', function () {
       case 'players/create':
         //message: nick
         createPlayer(message)
+      case 'start':
+        //message: game_id
+        startGame(message)
       case 'move':
         //message: game_id:player_index:cards:declared
         makeMove(message)
       case 'check':
         //message: game_id:player_index
         check(message)
+      case 'draw3':
+        //message: game_id:player_index
+        draw3(message)
     }
   })
 
@@ -62,4 +68,13 @@ function check(message) {
   const [game_id, player_index] = message.split(':')
   const game = db.games.find(n => n.id === game_id)
   game.check(player_index)
+}
+function startGame(game_id) {
+  const game = db.games.find(n => n.id === game_id)
+  game.start()
+}
+function check(message) {
+  const [game_id, player_index] = message.split(':')
+  const game = db.games.find(n => n.id === game_id)
+  game.draw(player_index, 3)
 }
