@@ -10,6 +10,7 @@ function Game(id, player, deck) {
         number: null,
         player: null
     }
+    this.winners = []
 
     this.join = (player) => {
         if(this.status !== 'ingame')
@@ -17,11 +18,31 @@ function Game(id, player, deck) {
     }
     this.move = (playerIndex, cards, declared) => {
         //cards verification in frontend
-        if(this.status === 'ingame' && cards.length <= 4 && this.turn === playerIndex && declared >= this.declared.value) {
+        if(this.status === 'ingame' &&
+        cards.length <= 4 &&
+         this.turn === playerIndex &&
+          declared >= this.declared.value &&
+           !this.winners.includes(this.players[playerIndex])) {
             this.pile = [...cards, ...this.pile]
             this.players[playerIndex].hand = this.players[playerIndex].hand.filter(n => !cards.includes(n))
             this.declared = {value: declared, number: cards.length, player: playerIndex}
             this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
+            if(this.winners.includes(this.players[this.turn])) {
+                if(this.turn === this.players.length - 1)
+                    this.turn = 0
+                else
+                    this.turn = this.turn + 1
+            }
+            if(playerIndex < 1) {
+                if(this.players[this.players.length - 1].hand.length === 0) {
+                    this.winners.push(this.players[playerIndex - 1])
+                }
+            }
+            else {
+                if(this.players[playerIndex - 1].hand.length === 0) {
+                    this.winners.push(this.players[playerIndex - 1])
+                }
+            }
         }
     }
     this.start = () => {
