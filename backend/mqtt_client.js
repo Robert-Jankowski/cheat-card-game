@@ -25,6 +25,12 @@ client.on('connect', function () {
       case 'players/create':
         //message: nick
         createPlayer(message)
+      case 'move':
+        //message: game_id:player_index:cards:declared
+        makeMove(message)
+      case 'check':
+        //message: game_id:player_index
+        check(message)
     }
   })
 
@@ -45,4 +51,15 @@ function createPlayer(nick) {
   const id = uuid()
   const player = new Player(nick, id)
   db.players.push(player)
+}
+function makeMove(message) {
+  const [game_id, player_index, cards_string, declared] = message.split(':')
+  const game = db.games.find(n => n.id === game_id)
+  const cards = JSON.parse("[" + cards_string + "]")
+  game.move(parseInt(player_index),cards, declared)
+}
+function check(message) {
+  const [game_id, player_index] = message.split(':')
+  const game = db.games.find(n => n.id === game_id)
+  game.check(player_index)
 }
