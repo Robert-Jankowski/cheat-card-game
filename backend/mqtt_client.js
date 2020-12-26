@@ -5,6 +5,7 @@ const {Database} = require('./classes/Database')
 const {Player} = require('./classes/Player')
 const shuffle = require('./helpers/shuffle')
 const deck = require('./helpers/deck')
+const {publicState, privateState, adminState} = require('./helpers/gamestate')
 const brokerAddress = "10.45.3.187:1883"
 const client  = mqtt.connect(`mqtt://${brokerAddress}`)
 
@@ -12,6 +13,7 @@ const db = new Database()
 client.on('connect', function () {
     console.log(`Połączono z brokerem o adresie: ${brokerAddress}`);
     client.subscribe('games/*')
+    client.subscribe('players/*')
   })
    
   client.on('message', function (topic, message) {
@@ -25,18 +27,27 @@ client.on('connect', function () {
       case 'players/create':
         //message: nick
         createPlayer(message)
-      case 'start':
+      case 'games/start':
         //message: game_id
         startGame(message)
-      case 'move':
+      case 'games/move':
         //message: game_id:player_index:cards:declared
         makeMove(message)
-      case 'check':
+      case 'games/check':
         //message: game_id:player_index
         check(message)
-      case 'draw3':
+      case 'games/draw3':
         //message: game_id:player_index
         draw3(message)
+      case 'games/publicstate':
+        //message: game_id
+        providePublicState()
+      case 'games/privatestate':
+        //message: game_id:player_id
+        providePrivateState()
+      case 'games/adminstate':
+        //message: game_id
+        provideAdminState()
     }
   })
 
@@ -77,4 +88,20 @@ function check(message) {
   const [game_id, player_index] = message.split(':')
   const game = db.games.find(n => n.id === game_id)
   game.draw(player_index, 3)
+}
+function providePublicState(game_id) {
+  const game = db.games.find(n => n.id === game_id)
+  const state = publicState(game)
+  client.publish(`state:${game_id}`, JSON.stringify(state))
+}
+function providePrivateState(message) {
+  const [game_id, player_id] = message.split(':')
+  const game = db.games.find(n => n.id === game_id)
+  const state = privateState(game, player_id)
+  client.publish(`state:${game_id}:${player_id}`, JSON.stringify(state))
+}
+function provideAdminState(game_id) {
+  const game = db.games.find(n => n.id === game_id)
+  const state = adminState(game)
+  client.publish(`adminstate:${game_id}`, JSON.stringify(state))
 }
