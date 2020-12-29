@@ -9,9 +9,14 @@ const {sendPrivateState, sendPublicState, sendAdminState, sendGameList} = requir
 
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 4000
 app.use(express.json())
-
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+  
 const db = new Database()
 
 //create player
@@ -19,6 +24,7 @@ app.post('/players', (req, res) => {
     const id = uuid()
     const player = new Player(req.body.nick, id)
     db.players.push(player)
+    return res.send(player)
 })
 
 //create game
