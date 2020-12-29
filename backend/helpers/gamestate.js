@@ -22,6 +22,7 @@ function privateState(game, player_id) {
             nick: n.nick,
             hand: n.hand.length
         }))],
+        player: player_id,
         hand: game.players.find(n => n.id === player_id).hand,
         status: game.status,
         pile: game.pile.length,
