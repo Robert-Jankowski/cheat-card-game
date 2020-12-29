@@ -61,8 +61,9 @@ app.patch('/games/:gameId/join', (req, res) => {
     const player = db.players.find(n => n.id === req.body.player_id)
     const game = db.games.find(n => n.id === req.params.game_id)
     game.players.push(player)
-    })
     sendGameStates(game.id)
+})
+    
 
 //start game
 app.patch('/games/:gameId/start', (req, res) => {
