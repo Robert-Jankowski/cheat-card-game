@@ -17,7 +17,12 @@ function sendPrivateState (state) {
 function sendAdminState (state) {
   client.publish(`adminstate/${state.id}`, JSON.stringify(state))
 }
+function sendGamesList (games) {
+  const message = games.map(n => ({id: n.id, players: n.players.length, status: n.status}))
+  client.publish('games', JSON.stringify(message))
+}
 
 exports.sendStates = {sendPublicState: sendPublicState,
                       sendPrivateState: sendPrivateState,
-                      sendAdminState: sendAdminState}
+                      sendAdminState: sendAdminState,
+                      sendGamesList: sendGamesList}

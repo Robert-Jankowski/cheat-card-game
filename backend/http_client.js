@@ -5,7 +5,7 @@ const {Player} = require('./classes/Player')
 const shuffle = require('./helpers/shuffle')
 const deck = require('./helpers/deck')
 const {publicState, privateState, adminState} = require('./helpers/gamestate')
-const {sendPrivateState, sendPublicState, sendAdminState} = require('./mqtt_client')
+const {sendPrivateState, sendPublicState, sendAdminState, sendGameList} = require('./mqtt_client')
 
 const express = require('express')
 const app = express()
@@ -28,6 +28,7 @@ app.post('/games', (req, res) => {
     const game = new Game(id, player, shuffle(deck))
     db.createGame(game)
     sendGameStates(game.id)
+    sendGameList(db.games)
   })
 
 //move
