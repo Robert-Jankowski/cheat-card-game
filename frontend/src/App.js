@@ -5,19 +5,25 @@ import Game from './components/Game'
 import Games from './components/Games'
 import Login from './components/Login'
 
-const mqtt = require('mqtt')
-const brokerAddress = "10.45.3.187:1883"
-const client  = mqtt.connect(`mqtt://${brokerAddress}`)
-client.subscribe('games')
-client.on('message', function (topic, message) {
-  switch(topic.toString) {
-    case 'games':
-      // setGames(message)
-      console.log("XD");
-  }
-})
+
 
 function App() {
+
+  const mqtt = require('mqtt')
+  const brokerAddress = "10.45.3.187:1883"
+  const client  = mqtt.connect(`mqtt://${brokerAddress}`)
+  client.subscribe('games')
+
+  client.on('connect', function () {
+    console.log(`Connected to broker:${brokerAddress}`)
+  })
+
+  client.on('message', function (topic, message) {
+    switch(topic.toString) {
+      case 'games':
+        setGames(message)
+    }
+  })
 
   const [player, setPlayer] = useState({
     id: null,
