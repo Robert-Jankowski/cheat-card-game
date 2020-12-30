@@ -5,6 +5,18 @@ import Game from './components/Game'
 import Games from './components/Games'
 import Login from './components/Login'
 
+const mqtt = require('mqtt')
+const brokerAddress = "10.45.3.187:1883"
+const client  = mqtt.connect(`mqtt://${brokerAddress}`)
+client.subscribe('games')
+client.on('message', function (topic, message) {
+  switch(topic.toString) {
+    case 'games':
+      // setGames(message)
+      console.log("XD");
+  }
+})
+
 function App() {
 
   const [player, setPlayer] = useState({
@@ -12,25 +24,28 @@ function App() {
     nick: null
   })
   const [path, setPath] = useState('login')
+  const [games, setGames] = useState([])
 
   return (
     <div>
       <Routing player={player}
                setPlayer={setPlayer}
                path={path}
-               setPath={setPath}/>
+               setPath={setPath}
+               games={games}
+               setGames={setGames}/>
     </div>
   );
 }
 
-const Routing = ({player, setPlayer, path, setPath}) => {
+const Routing = ({player, setPlayer, path, setPath, games, setGames}) => {
 
   function route() {
     switch(path) {
       case 'login':
         return (<Login setPlayer={setPlayer} setPath={setPath} setPath={setPath}/>)
       case 'games':
-        return <Games player={player}/>
+        return <Games player={player} setGames={setGames} games={games}/>
       case 'game':
         return <Game />
       case 'chat':

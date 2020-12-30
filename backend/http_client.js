@@ -2,8 +2,8 @@ const {v4: uuid} = require('uuid')
 const {Game} = require('./classes/Game')
 const {Database} = require('./classes/Database')
 const {Player} = require('./classes/Player')
-const shuffle = require('./helpers/shuffle')
-const deck = require('./helpers/deck')
+const {shuffle} = require('./helpers/shuffle')
+const {deck} = require('./helpers/deck')
 const {publicState, privateState, adminState} = require('./helpers/gamestate')
 const {sendPrivateState, sendPublicState, sendAdminState, sendGameList} = require('./mqtt_client')
 
@@ -35,6 +35,13 @@ app.post('/games', (req, res) => {
     db.createGame(game)
     sendGameStates(game.id)
     sendGameList(db.games)
+  })
+
+//get games list
+app.get('/games', (req, res) => {
+    const message = db.games.map(n => ({id: n.id, players: n.players.length, status: n.status}))
+    console.log(message)
+    return res.send(message)
   })
 
 //move
