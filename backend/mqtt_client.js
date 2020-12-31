@@ -1,5 +1,5 @@
 const mqtt = require('mqtt')
-const brokerAddress = "10.45.3.187:1883"
+const brokerAddress = "localhost:1883"
 const client  = mqtt.connect(`mqtt://${brokerAddress}`)
 
 client.on('connect', function () {
@@ -19,7 +19,7 @@ function sendAdminState (state) {
 }
 function sendGamesList (games) {
   const message = games.map(n => ({id: n.id, players: n.players.length, status: n.status}))
-  client.publish('games', JSON.stringify(message))
+  client.publish('games/list', JSON.stringify(message))
 }
 
 exports.sendStates = {sendPublicState: sendPublicState,

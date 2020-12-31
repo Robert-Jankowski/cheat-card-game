@@ -1,29 +1,14 @@
 import './App.css';
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Chat from './components/Chat'
 import Game from './components/Game'
 import Games from './components/Games'
 import Login from './components/Login'
-
+const mqtt = require('mqtt')
+const brokerAddress = "localhost:8000/mqtt"
 
 
 function App() {
-
-  const mqtt = require('mqtt')
-  const brokerAddress = "10.45.3.187:1883"
-  const client  = mqtt.connect(`mqtt://${brokerAddress}`)
-  client.subscribe('games')
-
-  client.on('connect', function () {
-    console.log(`Connected to broker:${brokerAddress}`)
-  })
-
-  client.on('message', function (topic, message) {
-    switch(topic.toString) {
-      case 'games':
-        setGames(message)
-    }
-  })
 
   const [player, setPlayer] = useState({
     id: null,
@@ -31,6 +16,28 @@ function App() {
   })
   const [path, setPath] = useState('login')
   const [games, setGames] = useState([])
+
+  useEffect(() => {
+    const client = mqtt.connect(`mqtt://${brokerAddress}`)
+    client.on('connect', function () {
+      console.log(`Connected to broker:${brokerAddress}`)
+      client.subscribe('games/list')
+    },[])
+
+    client.on('message', function (topic, message) {
+      console.log("GOT MESSAGE: ",topic, message)
+      switch(topic.toString()) {
+        case 'games/list':
+          setGames(JSON.parse(message.toString()))
+          break
+        default:
+          console.log("default")
+          break
+      }
+    }) 
+  },[])
+
+  
 
   return (
     <div>

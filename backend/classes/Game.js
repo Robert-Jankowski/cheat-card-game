@@ -47,7 +47,6 @@ function Game(id, player, deck) {
     }
     this.start = () => {
         this.status = 'ingame'
-        this.players = this.players.map(n => ({...n, hand:[]}))
         this.deck.map((n,i) => this.players[i%this.players.length].hand.push(n))
         const firstPlayerIndex = this.players.findIndex(n => n.hand.includes("hearts:2"))
         this.turn = firstPlayerIndex
