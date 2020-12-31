@@ -7,7 +7,7 @@ import Login from './components/Login'
 const mqtt = require('mqtt')
 const brokerAddress = "localhost:8000/mqtt"
 const axios = require('axios')
-
+const client = mqtt.connect(`mqtt://${brokerAddress}`)
 function App() {
 
   const [player, setPlayer] = useState({
@@ -20,37 +20,29 @@ function App() {
   const [gameId, setGameId] = useState(null)
 
   useEffect(() => {
-    const client = mqtt.connect(`mqtt://${brokerAddress}`)
     client.on('connect', function () {
       console.log(`Connected to broker:${brokerAddress}`)
       client.subscribe('games/list')
     },[])
 
     client.on('message', function (topic, message) {
-      console.log("GOT MESSAGE: ",topic, message)
-      switch(topic.toString()) {
-        case 'games/list':
-          setGames(JSON.parse(message.toString()))
-          break
-        case 'privatestate/*/*':
-          setGameState(JSON.parse(message.toString()))
-        default:
-          console.log("default")
-          break
+      console.log("GOT MESSAGE: ",topic.toString(), message.toString())
+      const topicStr = topic.toString()
+      if(topicStr === 'games/list') {
+        setGames(JSON.parse(message.toString()))
       }
-    }) 
-  },[])
+      else if((/privatestate\/*/).test(topicStr)) {
+        setGameState(JSON.parse(message.toString()))
+      }
+  })},[])
 
   useEffect(() => {
-    var client=  mqtt.connect(`mqtt://${brokerAddress}`)
     client.subscribe(`privatestate/${gameId}/${player.id}`)
     if(gameId !== null && player.id !== null)
     axios.get(`http://localhost:4000/games/${gameId}/${player.id}`).then(res => {
       setGameState(res.data)
     }).catch(error => console.log(error))
   },[gameId])
-
-  
 
   return (
     <div>
