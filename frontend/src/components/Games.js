@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 const axios = require('axios')
 
-const Games = ({player, games, setGames}) => {
+const Games = ({player, games, setGames, setPath, setGameId}) => {
     useEffect(() => {
         axios.get('http://localhost:4000/games').then(res => {
             setGames(res.data)
@@ -13,7 +13,8 @@ const Games = ({player, games, setGames}) => {
 
     function handleCreateGame() {
         axios.post('http://localhost:4000/games', {player_id: player.id}).then(res => {
-            console.log(res.data);
+            setGameId(res.data)
+            setPath('game')
         }).catch(error => {
             console.log(error)
         })
@@ -26,6 +27,15 @@ const Games = ({player, games, setGames}) => {
                         Game ID:{n.id} <br/>
                         Players: {n.players}/8 <br/>
                         Status: {n.status} <br/> <br/>
+                        <button onClick={() => {
+                            axios.patch(`http://localhost:4000/games/${n.id}/join`, {player_id: player.id}).then(res => {
+                                setGameId(n.id)
+                                setPath('game')
+                            }).catch(error => {
+                                console.log(error)
+                            })
+                            
+                        }}>JOIN</button>
                     </div>
                 )
             })}
