@@ -6,13 +6,15 @@
   "author": "Robert <robert.jankowski.kontakt@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "mqtt": "^4.2.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "jest": "^26.6.3"
-  },    "scripts": {
-      "test": "jest"
-    }
+  },
+  "scripts": {
+    "test": "jest"
+  }
 }

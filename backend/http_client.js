@@ -12,11 +12,15 @@ const express = require('express')
 const app = express()
 const port = 4000
 app.use(express.json())
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+
+const cors = require('cors')
+app.use(cors())
+
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+//   });
   
 const db = new Database()
 
@@ -36,15 +40,21 @@ app.post('/games', (req, res) => {
     db.createGame(game)
     sendGameStates(game.id)
     sendGamesList(db.games)
-    return res.send(`created game of id: ${id}`)
+    return res.send(id)
   })
 
 //get games list
 app.get('/games', (req, res) => {
     const message = db.games.map(n => ({id: n.id, players: n.players.length, status: n.status}))
-    console.log(message)
     return res.send(message)
   })
+
+//get private gamestate
+app.get('/games/:gameId/:playerId', (req, res) => {
+    const game = db.games.find(n => n.id === req.params.gameId)
+    const state = privateState(game, req.params.playerId)
+    return res.send(state)
+})
 
 //move
 app.post('/games/:gameId/move', (req, res) => {
@@ -74,9 +84,10 @@ app.post('/games/:gameId/check', (req, res) => {
 //join game
 app.patch('/games/:gameId/join', (req, res) => {
     const player = db.players.find(n => n.id === req.body.player_id)
-    const game = db.games.find(n => n.id === req.params.game_id)
+    const game = db.games.find(n => n.id === req.params.gameId)
     game.players.push(player)
     sendGameStates(game.id)
+    return res.send('success')
 })
     
 
