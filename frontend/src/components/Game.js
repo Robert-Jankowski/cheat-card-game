@@ -34,9 +34,9 @@ const Game = ({gameState, player}) => {
                         return(
                             <li>
                                 {n} 
-                                <button onClick={() => setSelectedCards([...selectedCards, n])}>
+                                {!selectedCards.includes(n) ? <button onClick={() => setSelectedCards([...selectedCards, n])}>
                                     {'>'}
-                                </button>
+                                </button> : <button disabled>{'>'}</button>}
                             </li>
                         )
                     })}
