@@ -118,6 +118,21 @@ const Game = ({gameState, player}) => {
                 <button disabled>Draw 3</button>
             )
     }
+    function Check() {
+        if(gameState.status !== 'waiting')
+            return gameState.declared.player !== gameState.players.findIndex(n => n.id === player.id) ? (
+                <button onClick={() => {
+                    axios.post(`http://localhost:4000/games/${gameState.id}/check`,{
+                        player_index: gameState.players.findIndex(n => n.id === player.id)
+                    })
+                }}>
+                    Check
+                </button>
+            ) :
+            (
+                <button disabled>Check</button>
+            )
+    }
 
     function render() {
         if(gameState !==null)
@@ -138,6 +153,7 @@ const Game = ({gameState, player}) => {
             {Hand()}
             {Move()}
             {Draw()}
+            {Check()}
             {Selected()}
             {DeclaredInput()}
             </div>
