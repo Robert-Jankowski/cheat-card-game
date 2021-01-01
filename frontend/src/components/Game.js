@@ -102,6 +102,22 @@ const Game = ({gameState, player}) => {
                 </div>
             )
     }
+    function Draw() {
+        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id))
+            return(
+                <button onClick={() => {
+                    axios.post(`http://localhost:4000/games/${gameState.id}/draw3`,{
+                        player_index: gameState.turn,
+                    }).then(res => {
+                        console.log(res)
+                    }).catch(error => console.log(error))
+                }}>Draw 3</button>
+            )
+        else
+            return(
+                <button disabled>Draw 3</button>
+            )
+    }
 
     function render() {
         if(gameState !==null)
@@ -121,6 +137,7 @@ const Game = ({gameState, player}) => {
             </ul>
             {Hand()}
             {Move()}
+            {Draw()}
             {Selected()}
             {DeclaredInput()}
             </div>

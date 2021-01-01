@@ -69,7 +69,7 @@ app.post('/games/:gameId/move', (req, res) => {
 //draw3
 app.post('/games/:gameId/draw3', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
-    game.draw(req.body.player_index, 3)
+    game.draw3(req.body.player_index)
     sendGameStates(game.id)
     return res.send('success')
 })

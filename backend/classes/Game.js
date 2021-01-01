@@ -79,7 +79,32 @@ function Game(id, player, deck) {
                 this.draw(this.declared.player, this.pile.length)
             }
             this.declared = {value: '2', number: null, player: null}
-        } 
+        }
+    }
+    this.draw3 = (player_index) => {
+
+        if(this.pile.length > 3) {
+            this.draw(player_index, 3)
+            this.declared = {value: '2', number: null, player: null}
+            this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
+            if(this.winners.includes(this.players[this.turn])) {
+                if(this.turn === this.players.length - 1)
+                    this.turn = 0
+                else
+                    this.turn = this.turn + 1
+            }
+            if(player_index < 1) {
+                if(this.players[this.players.length - 1].hand.length === 0) {
+                    this.winners.push(this.players[player_index - 1])
+                }
+            }
+            else {
+                if(this.players[player_index - 1].hand.length === 0) {
+                    this.winners.push(this.players[player_index - 1])
+                }
+            }
+        }
+        
     }
 }
 exports.Game = Game
