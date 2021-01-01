@@ -4,7 +4,8 @@ function publicState(game) {
         players: [...game.players.map((n,i) => ({
             index: i,
             nick: n.nick,
-            hand: n.hand.length
+            hand: n.hand.length,
+            id: n.id
         }))],
         status: game.status,
         pile: game.pile.length,
@@ -20,7 +21,8 @@ function privateState(game, player_id) {
         players: [...game.players.map((n,i) => ({
             index: i,
             nick: n.nick,
-            hand: n.hand.length
+            hand: n.hand.length,
+            id: n.id
         }))],
         player: player_id,
         hand: game.players.find(n => n.id === player_id).hand,
@@ -37,7 +39,8 @@ function adminState(game) {
         players: [...game.players.map((n,i) => ({
             index: i,
             nick: n.nick,
-            hand: n.hand
+            hand: n.hand,
+            id: n.id
         }))],
         status: game.status,
         pile: game.pile,

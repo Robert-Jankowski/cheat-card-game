@@ -64,6 +64,7 @@ app.post('/games/:gameId/move', (req, res) => {
     const cards = JSON.parse(cards_json)
     game.move(parseInt(player_index),cards, declared)
     sendGameStates(game.id)
+    return res.send('success')
 })
 
 //draw3
@@ -71,6 +72,7 @@ app.post('/games/:gameId/draw3', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
     game.draw(req.body.player_index, 3)
     sendGameStates(game.id)
+    return res.send('success')
 })
 
 //check
@@ -78,6 +80,7 @@ app.post('/games/:gameId/check', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
     game.check(req.body.player_index)
     sendGameStates(game.id)
+    return res.send('success')
 })
 
 
@@ -87,6 +90,7 @@ app.patch('/games/:gameId/join', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
     game.players.push(player)
     sendGameStates(game.id)
+    sendGamesList(db.games)
     return res.send('success')
 })
     
@@ -96,6 +100,8 @@ app.patch('/games/:gameId/start', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
     game.start()
     sendGameStates(game.id)
+    sendGamesList(db.games)
+    return res.send('success')
 })
 
 app.listen(port, () => {

@@ -71,7 +71,7 @@ const Routing = ({player, setPlayer, path, setPath, games, setGames, setGameId, 
                       setPath={setPath}
                       setGameId={setGameId}/>
       case 'game':
-        return <Game gameState={gameState}/>
+        return <Game gameState={gameState} player={player}/>
       case 'chat':
         return <Chat />
     }
