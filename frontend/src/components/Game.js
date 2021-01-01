@@ -26,10 +26,10 @@ const Game = ({gameState, player}) => {
             <div>
             {StartButton()}
             <ul>
-            {gameState.players.map(n => {
+            {gameState.players.map((n,i) => {
                 return(
                 <li key={n.index}>
-                    {n.nick} <br/>
+                    {n.nick} {gameState.turn === i ? "(turn)" : ""} <br/>
                     {n.hand} <br/>
                 </li>)
             })}

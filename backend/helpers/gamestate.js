@@ -8,6 +8,7 @@ function publicState(game) {
             id: n.id
         }))],
         status: game.status,
+        turn: game.turn,
         pile: game.pile.length,
         declared: game.declared,
         winners: game.winners
@@ -27,6 +28,7 @@ function privateState(game, player_id) {
         player: player_id,
         hand: game.players.find(n => n.id === player_id).hand,
         status: game.status,
+        turn: game.turn,
         pile: game.pile.length,
         declared: game.declared,
         winners: game.winners
@@ -43,6 +45,7 @@ function adminState(game) {
             id: n.id
         }))],
         status: game.status,
+        turn: game.turn,
         pile: game.pile,
         declared: game.declared,
         winners: game.winners
