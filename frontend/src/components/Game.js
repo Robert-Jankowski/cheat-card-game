@@ -62,16 +62,23 @@ const Game = ({gameState, player}) => {
     }
 
     function Move() {
+        
+        function validateValues(card) {
+            const possibleValues = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
+            return possibleValues.includes(card)
+        }
+
         if(gameState.turn === gameState.players.findIndex(n => n.id === player.id))
             return(
                 <button onClick={() => {
-                    axios.post(`http://localhost:4000/games/${gameState.id}/move`,{
-                        player_index: gameState.turn,
-                        cards: selectedCards,
-                        declared: declared
-                    }).then(res => {
-                        console.log(res)
-                    }).catch(error => console.log(error))
+                    if(selectedCards.length >= 1 && selectedCards.length <= 4 && validateValues(declared))
+                        axios.post(`http://localhost:4000/games/${gameState.id}/move`,{
+                            player_index: gameState.turn,
+                            cards: selectedCards,
+                            declared: declared
+                        }).then(res => {
+                            console.log(res)
+                        }).catch(error => console.log(error))
                 }}>MOVE</button>
             )
         else
@@ -119,11 +126,12 @@ const Game = ({gameState, player}) => {
             )
     }
     function Check() {
+        const player_index = gameState.players.findIndex(n => n.id === player.id)
         if(gameState.status !== 'waiting')
-            return gameState.declared.player !== gameState.players.findIndex(n => n.id === player.id) ? (
+            return gameState.declared.player !== player_index  && !gameState.winners.includes(gameState.players[player_index]) ? (
                 <button onClick={() => {
                     axios.post(`http://localhost:4000/games/${gameState.id}/check`,{
-                        player_index: gameState.players.findIndex(n => n.id === player.id)
+                        player_index: player_index
                     })
                 }}>
                     Check
