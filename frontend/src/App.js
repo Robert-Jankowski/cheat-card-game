@@ -26,7 +26,6 @@ function App() {
     },[])
 
     client.on('message', function (topic, message) {
-      console.log("GOT MESSAGE: ",topic.toString(), message.toString())
       const topicStr = topic.toString()
       if(topicStr === 'games/list') {
         setGames(JSON.parse(message.toString()))

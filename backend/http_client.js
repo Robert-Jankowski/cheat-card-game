@@ -59,9 +59,8 @@ app.get('/games/:gameId/:playerId', (req, res) => {
 //move
 app.post('/games/:gameId/move', (req, res) => {
     const game_id = req.params.gameId
-    const [player_index, cards_json, declared] = req.body
+    const {player_index, cards, declared} = req.body
     const game = db.games.find(n => n.id === game_id)
-    const cards = JSON.parse(cards_json)
     game.move(parseInt(player_index),cards, declared)
     sendGameStates(game.id)
     return res.send('success')

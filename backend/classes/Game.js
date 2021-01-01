@@ -17,11 +17,18 @@ function Game(id, player, deck) {
             this.players.push(player)
     }
     this.move = (playerIndex, cards, declared) => {
-        //cards verification in frontend
+        
+        function mapDeclared(card) {
+            return card === "J" ? 11 :
+            card === "Q" ? 12 :
+            card === "K" ? 13 :
+            card === "A" ? 14 :
+            parseInt(card)
+        }
         if(this.status === 'ingame' &&
         cards.length <= 4 &&
          this.turn === playerIndex &&
-          declared >= this.declared.value &&
+          mapDeclared(declared) >= mapDeclared(this.declared.value) &&
            !this.winners.includes(this.players[playerIndex])) {
             this.pile = [...cards, ...this.pile]
             this.players[playerIndex].hand = this.players[playerIndex].hand.filter(n => !cards.includes(n))

@@ -1,10 +1,17 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 const axios = require('axios')
 
 const Game = ({gameState, player}) => {
+
+    const [selectedCards, setSelectedCards] = useState([])
+    const [declared, setDeclared] = useState("2")
     
+    useEffect(() => {
+        setSelectedCards([])
+        setDeclared("2")
+    }, [gameState]);
+
     function StartButton () {
-        console.log(gameState.players[0].id, player.id)
         if(gameState.players[0].id === player.id && gameState.status === 'waiting')
             return (
             <button onClick={() => {
@@ -19,12 +26,90 @@ const Game = ({gameState, player}) => {
                 <button disabled>START GAME</button>
             )
     }
+    function Hand () {
+        if(gameState.status !== 'waiting')
+            return(
+                <ul>
+                    {gameState.hand.map(n => {
+                        return(
+                            <li>
+                                {n} 
+                                <button onClick={() => setSelectedCards([...selectedCards, n])}>
+                                    {'>'}
+                                </button>
+                            </li>
+                        )
+                    })}
+                </ul>
+            )
+    }
+    function Selected() {
+        if(gameState.status !== 'waiting')
+            return(
+                <ul>
+                    {selectedCards.map(n => {
+                        return(
+                            <li>
+                                {n}
+                                <button onClick={() => {
+                                    setSelectedCards(selectedCards.filter(m => m !== n))
+                                }}>{'<'}</button>
+                            </li>
+                        )
+                    })}
+                </ul>
+            )
+    }
+
+    function Move() {
+        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id))
+            return(
+                <button onClick={() => {
+                    axios.post(`http://localhost:4000/games/${gameState.id}/move`,{
+                        player_index: gameState.turn,
+                        cards: selectedCards,
+                        declared: declared
+                    }).then(res => {
+                        console.log(res)
+                    }).catch(error => console.log(error))
+                }}>MOVE</button>
+            )
+        else
+            return(
+                <button disabled>MOVE</button>
+            )
+    }
+    function DeclaredInput() {
+        return(
+            <input type={"text"} placeholder={"declared"} onChange={(e) => setDeclared(e.target.value)}/>
+        )
+    }
+    function Declared() {
+        if(gameState.status !== 'waiting')
+            return(
+                <div>
+                    Declared value: {gameState.declared.value} <br/>
+                    Quantity of cards:  {gameState.declared.number} <br/>
+                </div>
+            )
+    }
+    function Pile() {
+        if(gameState.status !== 'waiting')
+            return(
+                <div>
+                    Pile: 
+                    {gameState.pile}
+                </div>
+            )
+    }
 
     function render() {
         if(gameState !==null)
         return(
             <div>
             {StartButton()}
+            {Declared()}
+            {Pile()}
             <ul>
             {gameState.players.map((n,i) => {
                 return(
@@ -34,6 +119,10 @@ const Game = ({gameState, player}) => {
                 </li>)
             })}
             </ul>
+            {Hand()}
+            {Move()}
+            {Selected()}
+            {DeclaredInput()}
             </div>
         )
     }
