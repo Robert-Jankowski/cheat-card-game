@@ -18,6 +18,8 @@ function App() {
   const [games, setGames] = useState([])
   const [gameState, setGameState] = useState(null)
   const [gameId, setGameId] = useState(null)
+  const [chatState, setChatState] = useState(null)
+  const [chatId, setChatId] = useState(null)
 
   useEffect(() => {
     client.on('connect', function () {
@@ -33,6 +35,9 @@ function App() {
       else if((/privatestate\/*/).test(topicStr)) {
         setGameState(JSON.parse(message.toString()))
       }
+      else if((/chats\/*/).test(topicStr)) {
+        setChatState(JSON.parse(message.toString()))
+      }
   })},[])
 
   useEffect(() => {
@@ -43,6 +48,15 @@ function App() {
     }).catch(error => console.log(error))
   },[gameId])
 
+  useEffect(() => {
+    client.subscribe(`chats/${chatId}`)
+    if(chatId !== null && player.id !== null)
+    axios.get(`http://localhost:4000/chats/${chatId}`).then(res => {
+      setChatState(res.data)
+    }).catch(error => console.log(error))
+  },[chatId])
+
+
   return (
     <div>
       <Routing player={player}
@@ -52,12 +66,15 @@ function App() {
                games={games}
                setGames={setGames}
                setGameId={setGameId}
-               gameState={gameState}/>
+               gameState={gameState}
+               chatState={chatState}
+               setChatState={setChatState}
+               setChatId={setChatId}/>
     </div>
   );
 }
 
-const Routing = ({player, setPlayer, path, setPath, games, setGames, setGameId, gameState}) => {
+const Routing = ({player, setPlayer, path, setPath, games, setGames, setGameId, gameState, chatState, setChatId}) => {
 
   function route() {
     switch(path) {
@@ -68,11 +85,12 @@ const Routing = ({player, setPlayer, path, setPath, games, setGames, setGameId, 
                       setGames={setGames}
                       games={games}
                       setPath={setPath}
-                      setGameId={setGameId}/>
+                      setGameId={setGameId}
+                      setChatId={setChatId}/>
       case 'game':
         return <Game gameState={gameState} player={player}/>
       case 'chat':
-        return <Chat />
+        return <Chat chatState={chatState} player={player}/>
     }
   }
 

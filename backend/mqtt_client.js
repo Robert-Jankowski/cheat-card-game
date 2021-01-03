@@ -22,7 +22,7 @@ function sendGamesList (games) {
   client.publish('games/list', JSON.stringify(message))
 }
 function sendChatState (chat) {
-  const message = {users: chat.users, messages: chat.messages}
+  const message = {id: chat.id, users: chat.users, messages: chat.messages}
   client.publish(`chats/${chat.id}`,JSON.stringify(message))
 }
 

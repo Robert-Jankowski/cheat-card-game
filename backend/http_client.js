@@ -106,12 +106,13 @@ app.patch('/games/:gameId/start', (req, res) => {
 
 //create chat
 app.post('/chats/create', (req, res) => {
-    const {user, name, password} = req.body
+    const {userId, name, password} = req.body
     if(!db.chats.some(n => n.name === name)) {
+        const user = db.players.find(n => n.id === userId)
         const id = uuid()
         const chat = new Chat(id, user, name, password)
         db.chats.push(chat)
-        return res.send(chat)
+        return res.send(chat.id)
     }
     else {
         return res.send(null)
@@ -126,10 +127,23 @@ app.post('/chats/:chatId/message', (req, res) => {
     return res.send('success')
 })
 //join chat
-app.patch('/chats/:chatId/join', (req, res) => {
-    const user = db.players.find(n => n.id === req.body.user_id) 
-    db.joinChat(req.params.chatId, user)
-    return res.send('success')
+app.patch('/chats/join', (req, res) => {
+    const id = db.logToChat(req.body.name, req.body.password)
+    if(id !== null) {
+        const user = db.players.find(n => n.id === req.body.user_id) 
+        db.joinChat(id, user)
+        return res.send(id)
+    }
+    else {
+        return res.send(null)
+    }
+    
+})
+//get chat state
+app.get('/chats/:chatId', (req, res) => {
+    const chat = db.chats.find(n => n.id === req.params.chatId)
+    const response = {id: chat.id, users: chat.users, messages: chat.messages}
+    return res.send(response)
 })
 
 app.listen(port, () => {
