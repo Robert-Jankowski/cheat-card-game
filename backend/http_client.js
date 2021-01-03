@@ -2,11 +2,12 @@ const {v4: uuid} = require('uuid')
 const {Game} = require('./classes/Game')
 const {Database} = require('./classes/Database')
 const {Player} = require('./classes/Player')
+const {Chat} = require('./classes/Chat')
 const {shuffle} = require('./helpers/shuffle')
 const {deck} = require('./helpers/deck')
 const {publicState, privateState, adminState} = require('./helpers/gamestate')
 const {sendStates} = require('./mqtt_client')
-const {sendPrivateState, sendPublicState, sendAdminState, sendGamesList} = sendStates
+const {sendPrivateState, sendPublicState, sendAdminState, sendGamesList, sendChatState} = sendStates
 
 const express = require('express')
 const app = express()
@@ -100,6 +101,34 @@ app.patch('/games/:gameId/start', (req, res) => {
     game.start()
     sendGameStates(game.id)
     sendGamesList(db.games)
+    return res.send('success')
+})
+
+//create chat
+app.post('/chats/create', (req, res) => {
+    const {user, name, password} = req.body
+    if(!db.chats.some(n => n.name === name)) {
+        const id = uuid()
+        const chat = new Chat(id, user, name, password)
+        db.chats.push(chat)
+        return res.send(chat)
+    }
+    else {
+        return res.send(null)
+    }
+})
+//send message in chat
+app.post('/chats/:chatId/message', (req, res) => {
+    const chat = db.chats.find(n => n.id === req.params.chatId)
+    const {nick, message} = req.body
+    chat.sendMessage(nick, message)
+    sendChatState(chat)
+    return res.send('success')
+})
+//join chat
+app.patch('/chats/:chatId/join', (req, res) => {
+    const user = db.players.find(n => n.id === req.body.user_id) 
+    db.joinChat(req.params.chatId, user)
     return res.send('success')
 })
 

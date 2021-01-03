@@ -21,8 +21,13 @@ function sendGamesList (games) {
   const message = games.map(n => ({id: n.id, players: n.players.length, status: n.status}))
   client.publish('games/list', JSON.stringify(message))
 }
+function sendChatState (chat) {
+  const message = {users: chat.users, messages: chat.messages}
+  client.publish(`chats/${chat.id}`,JSON.stringify(message))
+}
 
 exports.sendStates = {sendPublicState: sendPublicState,
                       sendPrivateState: sendPrivateState,
                       sendAdminState: sendAdminState,
-                      sendGamesList: sendGamesList}
+                      sendGamesList: sendGamesList,
+                      sendChatState: sendChatState}
