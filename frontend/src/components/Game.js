@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import ChatWindow from './ChatWindow' 
 const axios = require('axios')
 
 const Game = ({gameState, player}) => {
@@ -164,6 +165,7 @@ const Game = ({gameState, player}) => {
             {Check()}
             {Selected()}
             {DeclaredInput()}
+            <ChatWindow gameState={gameState} nick={player.nick}/>
             </div>
         )
     }

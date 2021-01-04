@@ -17,12 +17,6 @@ app.use(express.json())
 const cors = require('cors')
 app.use(cors())
 
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-//   });
-  
 const db = new Database()
 
 //create player
@@ -89,6 +83,14 @@ app.post('/games/:gameId/check', (req, res) => {
     return res.send('success')
 })
 
+//send ingame message
+app.post('/games/:gameId/message', (req, res) => {
+    const {nick, message} = req.body
+    const game = db.games.find(n => n.id === req.params.gameId)
+    game.sendMessage(nick, message)
+    sendGameStates(game.id)
+    return res.send('success')
+})
 
 //join game
 app.patch('/games/:gameId/join', (req, res) => {
@@ -99,7 +101,6 @@ app.patch('/games/:gameId/join', (req, res) => {
     sendGamesList(db.games)
     return res.send('success')
 })
-    
 
 //start game
 app.patch('/games/:gameId/start', (req, res) => {

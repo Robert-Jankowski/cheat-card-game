@@ -11,6 +11,7 @@ function Game(id, player, deck) {
         player: null
     }
     this.winners = []
+    this.messages = []
 
     this.join = (player) => {
         if(this.status !== 'ingame')
@@ -104,7 +105,9 @@ function Game(id, player, deck) {
                 }
             }
         }
-        
+    }
+    this.sendMessage = (nick, message) => {
+        this.messages.push({nick, message})
     }
 }
 exports.Game = Game

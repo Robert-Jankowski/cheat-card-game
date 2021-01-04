@@ -7,7 +7,7 @@ const Chat = ({chatState, player}) => {
 
     function handleSend() {
         if(messageInput !== "") {
-            axios.post(`http://localhost:4000/chats/${chatState.id}/message`,{nick: player.nick, message: messageInput})
+            axios.post(`http://localhost:4000/chats/${chatState.id}/message`, {nick: player.nick, message: messageInput})
                 .catch(error => console.log(error))
         }
     }

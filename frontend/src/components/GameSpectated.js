@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-const axios = require('axios')
+import ChatWindow from './ChatWindow' 
 
 const GameSpectated = ({gameState, user}) => {
 
@@ -36,6 +36,7 @@ const GameSpectated = ({gameState, user}) => {
                 </li>)
             })}
             </ul>
+            <ChatWindow gameState={gameState} nick={user.nick}/>
             </div>
         )
     }

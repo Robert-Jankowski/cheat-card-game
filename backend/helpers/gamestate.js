@@ -11,7 +11,8 @@ function publicState(game) {
         turn: game.turn,
         pile: game.pile.length,
         declared: game.declared,
-        winners: game.winners
+        winners: game.winners,
+        messages: game.messages
     }
     return state
 }
@@ -31,7 +32,8 @@ function privateState(game, player_id) {
         turn: game.turn,
         pile: game.pile.length,
         declared: game.declared,
-        winners: game.winners
+        winners: game.winners,
+        messages: game.messages
     }
     return state
 }
@@ -48,7 +50,8 @@ function adminState(game) {
         turn: game.turn,
         pile: game.pile,
         declared: game.declared,
-        winners: game.winners
+        winners: game.winners,
+        messages: game.messages
     }
     return state
 }
