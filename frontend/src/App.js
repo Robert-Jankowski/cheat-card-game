@@ -4,6 +4,7 @@ import Chat from './components/Chat'
 import Game from './components/Game'
 import Games from './components/Games'
 import Login from './components/Login'
+import GameSpectated from './components/GameSpectated'
 const mqtt = require('mqtt')
 const brokerAddress = "localhost:8000/mqtt"
 const axios = require('axios')
@@ -18,6 +19,7 @@ function App() {
   const [games, setGames] = useState([])
   const [gameState, setGameState] = useState(null)
   const [gameId, setGameId] = useState(null)
+  const [gameSpectatedId, setGameSpectatedId] = useState(null)
   const [chatState, setChatState] = useState(null)
   const [chatId, setChatId] = useState(null)
 
@@ -38,6 +40,9 @@ function App() {
       else if((/chats\/*/).test(topicStr)) {
         setChatState(JSON.parse(message.toString()))
       }
+      else if((/publicstate\/*/).test(topicStr)) {
+        setGameState(JSON.parse(message.toString()))
+      }
   })},[])
 
   useEffect(() => {
@@ -56,6 +61,14 @@ function App() {
     }).catch(error => console.log(error))
   },[chatId])
 
+  useEffect(() => {
+    client.subscribe(`publicstate/${gameSpectatedId}`)
+    if(gameSpectatedId !== null && player.id !== null)
+    axios.get(`http://localhost:4000/games/${gameSpectatedId}`).then(res => {
+      setGameState(res.data)
+    }).catch(error => console.log(error))
+  },[gameSpectatedId])
+
 
   return (
     <div>
@@ -69,12 +82,24 @@ function App() {
                gameState={gameState}
                chatState={chatState}
                setChatState={setChatState}
-               setChatId={setChatId}/>
+               setChatId={setChatId}
+               setGameSpectatedId={setGameSpectatedId}/>
     </div>
   );
 }
 
-const Routing = ({player, setPlayer, path, setPath, games, setGames, setGameId, gameState, chatState, setChatId}) => {
+const Routing = (
+  {player, 
+  setPlayer,
+  path,
+  setPath,
+  games,
+  setGames,
+  setGameId,
+  gameState,
+  chatState,
+  setChatId,
+  setGameSpectatedId}) => {
 
   function route() {
     switch(path) {
@@ -86,11 +111,14 @@ const Routing = ({player, setPlayer, path, setPath, games, setGames, setGameId, 
                       games={games}
                       setPath={setPath}
                       setGameId={setGameId}
-                      setChatId={setChatId}/>
+                      setChatId={setChatId}
+                      setGameSpectatedId={setGameSpectatedId}/>
       case 'game':
         return <Game gameState={gameState} player={player}/>
       case 'chat':
         return <Chat chatState={chatState} player={player}/>
+      case 'spectate':
+        return <GameSpectated gameState={gameState} user={player}/>
     }
   }
 

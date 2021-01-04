@@ -3,7 +3,7 @@ const axios = require('axios')
 
 
 
-const Games = ({player, games, setGames, setPath, setGameId, setChatId}) => {
+const Games = ({player, games, setGames, setPath, setGameId, setChatId, setGameSpectatedId}) => {
     useEffect(() => {
         axios.get('http://localhost:4000/games').then(res => {
             setGames(res.data)
@@ -64,6 +64,11 @@ const Games = ({player, games, setGames, setPath, setGameId, setChatId}) => {
                             })
                             
                         }}>JOIN</button>
+                        <button onClick={() => {
+                                setGameSpectatedId(n.id)
+                                setPath('spectate')
+                            
+                        }}>SPECTATE</button>
                     </div>
                 )
             })}

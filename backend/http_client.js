@@ -56,6 +56,12 @@ app.get('/games/:gameId/:playerId', (req, res) => {
     const state = privateState(game, req.params.playerId)
     return res.send(state)
 })
+//get public gamestate
+app.get('/games/:gameId', (req, res) => {
+    const game = db.games.find(n => n.id === req.params.gameId)
+    const state = publicState(game)
+    return res.send(state)
+})
 
 //move
 app.post('/games/:gameId/move', (req, res) => {
