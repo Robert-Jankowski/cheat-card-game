@@ -116,7 +116,7 @@ const Routing = (
       case 'game':
         return <Game gameState={gameState} player={player}/>
       case 'chat':
-        return <Chat chatState={chatState} player={player}/>
+        return <Chat chatState={chatState} player={player} setChatId={setChatId} setPath={setPath}/>
       case 'spectate':
         return <GameSpectated gameState={gameState} user={player}/>
     }

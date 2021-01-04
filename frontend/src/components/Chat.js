@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 const axios = require('axios')
 
-const Chat = ({chatState, player}) => {
+const Chat = ({chatState, player, setChatId, setPath}) => {
 
     const [messageInput, setMessageInput] = useState('')
 
@@ -11,10 +11,30 @@ const Chat = ({chatState, player}) => {
                 .catch(error => console.log(error))
         }
     }
+    function handleLeave() {
+        axios.patch(`http://localhost:4000/chats/${chatState.id}/leave`, {player_id: player.id}).then(res => {
+            setPath('games')
+            setChatId(null)
+        })
+                .catch(error => console.log(error))
+    }
+
     function render() {
         if(chatState !== null) {
             return(
                 <div>
+                    <button onClick={() => handleLeave()}>LEAVE CHAT</button>
+                    <p>
+                    Users in chat: 
+                    </p>
+                    <ul>
+                        {console.log(chatState.users)}
+                        {chatState.users.map(n => {
+                            return(
+                                <li>{n.nick}</li>
+                            )
+                        })}
+                    </ul>
                     <input placeholder={"send message"} onChange={(e) => setMessageInput(e.target.value)}/>
                     <button onClick={() => handleSend()}>SEND</button>
                     <ul>

@@ -139,13 +139,26 @@ app.patch('/chats/join', (req, res) => {
     if(id !== null) {
         const user = db.players.find(n => n.id === req.body.user_id) 
         db.joinChat(id, user)
+        const chat = db.chats.find(n => n.id === id)
+        sendChatState(chat)
         return res.send(id)
     }
     else {
         return res.send(null)
     }
-    
 })
+
+//leave chat
+app.patch('/chats/:chatId/leave', (req, res) => {
+    const chat = db.chats.find(n => n.id === req.params.chatId)
+    chat.leaveChat(req.body.player_id)
+    if(chat.users.length > 0)
+        sendChatState(chat)
+    else
+        db.closeChat(req.params.chatId)
+    return res.send('success')
+})
+
 //get chat state
 app.get('/chats/:chatId', (req, res) => {
     const chat = db.chats.find(n => n.id === req.params.chatId)

@@ -8,8 +8,8 @@ function Chat(id, user, name, password) {
     this.sendMessage = (nick, message) => {
         this.messages.push({message: message, user: nick})
     }
-    this.leaveChat = (user) => {
-        this.users.filter(n => n.id === user.id)
+    this.leaveChat = (user_id) => {
+        this.users = this.users.filter(n => n.id !== user_id)
     }
 
 }

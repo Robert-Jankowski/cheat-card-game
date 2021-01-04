@@ -31,8 +31,7 @@ const Games = ({player, games, setGames, setPath, setGameId, setChatId, setGameS
         })
     }
     function handleJoinChat() {
-        axios.patch(`http://localhost:4000/chats/join`, {userId: player.id, name: chatForm.name, password: chatForm.password}).then(res => {
-            console.log(res.data);
+        axios.patch(`http://localhost:4000/chats/join`, {user_id: player.id, name: chatForm.name, password: chatForm.password}).then(res => {
             if(res.data !== "") {
                 setChatId(res.data)
                 setPath('chat')
