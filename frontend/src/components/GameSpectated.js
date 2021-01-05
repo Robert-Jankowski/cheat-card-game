@@ -1,7 +1,16 @@
 import React, {useState} from 'react'
 import ChatWindow from './ChatWindow' 
 
-const GameSpectated = ({gameState, user}) => {
+const GameSpectated = ({gameState, user, setPath}) => {
+
+    function LeaveButton () {
+        return (
+            <button onClick={()=>{
+                setPath('games')
+            }}>LEAVE GAME</button>
+        )
+        
+    }
 
     function Pile() {
         if(gameState.status !== 'waiting')
@@ -25,6 +34,7 @@ const GameSpectated = ({gameState, user}) => {
         if(gameState !==null)
         return(
             <div>
+            {LeaveButton()}
             {Declared()}
             {Pile()}
             <ul>

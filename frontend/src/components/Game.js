@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import ChatWindow from './ChatWindow' 
 const axios = require('axios')
 
-const Game = ({gameState, player}) => {
+const Game = ({gameState, player, setPath}) => {
 
     const [selectedCards, setSelectedCards] = useState([])
     const [declared, setDeclared] = useState("2")
@@ -11,6 +11,17 @@ const Game = ({gameState, player}) => {
         setSelectedCards([])
         setDeclared("2")
     }, [gameState]);
+
+    function LeaveButton () {
+        return (
+            <button onClick={()=>{
+                axios.patch(`http://localhost:4000/games/${gameState.id}/leave`, {player_id: player.id}).then(res => {
+                    setPath('games')
+                }).catch(error => console.log(error))
+            }}>LEAVE GAME</button>
+        )
+        
+    }
 
     function StartButton () {
         if(gameState.players[0].id === player.id && gameState.status === 'waiting')
@@ -147,6 +158,7 @@ const Game = ({gameState, player}) => {
         if(gameState !==null)
         return(
             <div>
+            {LeaveButton()}
             {StartButton()}
             {Declared()}
             {Pile()}

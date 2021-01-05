@@ -102,6 +102,17 @@ app.patch('/games/:gameId/join', (req, res) => {
     return res.send('success')
 })
 
+//leave game
+app.patch('/games/:gameId/leave', (req, res) => {
+    const game = db.games.find(n => n.id === req.params.gameId)
+    game.leave(req.body.player_id)
+    sendGameStates(game.id)
+    if(game.players.length === 0)
+        db.games = db.games.filter(n => n === n.id === req.params.gameId)
+    sendGamesList(db.games)
+    return res.send('success')
+})
+
 //start game
 app.patch('/games/:gameId/start', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)

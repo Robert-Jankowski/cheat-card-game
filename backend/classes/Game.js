@@ -7,7 +7,7 @@ function Game(id, player, deck) {
     this.turn = null
     this.declared = {
         value: "2",
-        number: null,
+        number: 1,
         player: null
     }
     this.winners = []
@@ -108,6 +108,16 @@ function Game(id, player, deck) {
     }
     this.sendMessage = (nick, message) => {
         this.messages.push({nick, message})
+    }
+    this.leave = (player_index) => {
+        const player = this.players.find(n => n.id === player_index)
+        this.pile = [...this.pile, ...player.hand]
+        player.hand = []
+        if(this.turn === player_index) {
+            this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
+        }
+        this.declared = {value: "2", number: 1, player: null}
+        this.players = this.players.filter(n => n.id !== player_index)
     }
 }
 exports.Game = Game
