@@ -1,9 +1,23 @@
 import React, {useEffect, useState} from 'react'
+import {useStoreState, useStoreActions} from 'easy-peasy'
 const axios = require('axios')
 
 
 
-const Games = ({player, games, setGames, setPath, setGameId, setChatId, setGameSpectatedId}) => {
+const Games = () => {
+
+    const {games, player} = useStoreState(store => ({
+        games: store.games,
+        player: store.player
+    }))
+    const {setGames, setPath, setGameId, setChatId, setGameSpectatedId} = useStoreActions(actions => ({
+        setGames: actions.setGames,
+        setPath: actions.setPath,
+        setGameId: actions.setGameId,
+        setChatId: actions.setChatId,
+        setGameSpectatedId: actions.setGameSpectatedId
+    }))
+
     useEffect(() => {
         axios.get('http://localhost:4000/games').then(res => {
             setGames(res.data)

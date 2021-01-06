@@ -1,12 +1,32 @@
 import React, {useEffect, useState} from 'react'
+import {useStoreActions, useStoreState} from 'easy-peasy'
 import ChatWindow from './ChatWindow' 
 const axios = require('axios')
 
-const Game = ({gameState, player, setPath}) => {
+const Game = () => {
+
+    const [loaded, setLoaded] = useState(false)
+
+    const {gameState, player, gameId} = useStoreState(store => ({
+        gameState: store.gameState,
+        player: store.player,
+        gameId: store.gameId
+    }))
+    const {setPath, setGameState} = useStoreActions(action => ({
+        setPath: action.setPath,
+        setGameState: action.setGameState
+    }))
 
     const [selectedCards, setSelectedCards] = useState([])
     const [declared, setDeclared] = useState("2")
-    
+
+    useEffect(() => {
+        axios.get(`http://localhost:4000/games/${gameId}/${player.id}`).then(res => {
+            setGameState(res.data)
+            setLoaded(true)
+        }).catch(error => console.log(error))
+    }, [])
+
     useEffect(() => {
         setSelectedCards([])
         setDeclared("2")
@@ -155,31 +175,35 @@ const Game = ({gameState, player, setPath}) => {
     }
 
     function render() {
-        if(gameState !==null)
-        return(
-            <div>
-            {LeaveButton()}
-            {StartButton()}
-            {Declared()}
-            {Pile()}
-            <ul>
-            {gameState.players.map((n,i) => {
+        if(loaded)
+            return(
+                <div>
+                {LeaveButton()}
+                {StartButton()}
+                {Declared()}
+                {Pile()}
+                <ul>
+                {gameState.players.map((n,i) => {
+                    return(
+                    <li key={n.index}>
+                        {n.nick} {gameState.turn === i ? "(turn)" : ""} <br/>
+                        {n.hand} <br/>
+                    </li>)
+                })}
+                </ul>
+                {Hand()}
+                {Move()}
+                {Draw()}
+                {Check()}
+                {Selected()}
+                {DeclaredInput()}
+                <ChatWindow gameState={gameState} nick={player.nick}/>
+                </div>
+            )
+        else
                 return(
-                <li key={n.index}>
-                    {n.nick} {gameState.turn === i ? "(turn)" : ""} <br/>
-                    {n.hand} <br/>
-                </li>)
-            })}
-            </ul>
-            {Hand()}
-            {Move()}
-            {Draw()}
-            {Check()}
-            {Selected()}
-            {DeclaredInput()}
-            <ChatWindow gameState={gameState} nick={player.nick}/>
-            </div>
-        )
+                    <p>Loading</p>
+                )
     }
 
     return(

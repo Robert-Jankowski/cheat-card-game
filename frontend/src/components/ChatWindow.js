@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 const axios = require('axios')
 
-const ChatWindow = ({nick, gameState}) => {
+const ChatWindow = ({gameState, nick}) => {
 
     const [messageInput, setMessageInput] = useState('')
 

@@ -1,7 +1,29 @@
-import React, {useState} from 'react'
-import ChatWindow from './ChatWindow' 
+import React, {useState, useEffect} from 'react'
+import {useStoreActions, useStoreState} from 'easy-peasy'
+import ChatWindow from './ChatWindow'
+const axios = require('axios')
 
-const GameSpectated = ({gameState, user, setPath}) => {
+const GameSpectated = () => {
+
+    const [loaded, setLoaded] = useState(false)
+
+    const {gameState, user, gameSpectatedId} = useStoreState(store => ({
+        gameState: store.gameState,
+        user: store.player,
+        gameSpectatedId: store.gameSpectatedId
+    }))
+    const {setPath, setGameState} = useStoreActions(action => ({
+        setPath: action.setPath,
+        setGameState: action.setGameState
+    }))
+
+    useEffect(() => {
+        axios.get(`http://localhost:4000/games/${gameSpectatedId}`).then(res => {
+            console.log(res.data)
+            setGameState(res.data)
+            setLoaded(true)
+        }).catch(error => console.log(error))
+    },[gameSpectatedId])
 
     function LeaveButton () {
         return (
@@ -31,9 +53,9 @@ const GameSpectated = ({gameState, user, setPath}) => {
             )
     }
     function render() {
-        if(gameState !==null)
+        if(loaded)
         return(
-            <div>
+            <React.Fragment>
             {LeaveButton()}
             {Declared()}
             {Pile()}
@@ -47,14 +69,14 @@ const GameSpectated = ({gameState, user, setPath}) => {
             })}
             </ul>
             <ChatWindow gameState={gameState} nick={user.nick}/>
-            </div>
+            </React.Fragment>
         )
     }
 
     return(
-        <div>
+        <main className="game">
             {render()}
-        </div>
+        </main>
     )
 }
 export default GameSpectated

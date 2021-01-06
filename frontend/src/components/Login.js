@@ -1,7 +1,13 @@
 import React, {useState} from 'react'
+import {useStoreActions} from 'easy-peasy'
 import 'axios'
 import axios from 'axios'
-const Login = ({setPlayer, setPath}) => {
+const Login = () => {
+
+    const {setPlayer, setPath} = useStoreActions(actions => ({
+        setPlayer: actions.setPlayer,
+        setPath: actions.setPath
+    }))
 
     const [nickInput, setNickInput] = useState('')
 
