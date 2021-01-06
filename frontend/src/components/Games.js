@@ -24,8 +24,13 @@ const Games = ({player, games, setGames, setPath, setGameId, setChatId, setGameS
 
     function handleCreateChat() {
         axios.post('http://localhost:4000/chats/create', {userId: player.id, name: chatForm.name, password: chatForm.password}).then(res => {
-            setChatId(res.data)
-            setPath('chat')
+            if(res.data !== "") {
+                setChatId(res.data)
+                setPath('chat')
+            }
+            else {
+                alert("This chat name already exists")
+            }
         }).catch(error => {
             console.log(error)
         })
