@@ -4,6 +4,7 @@ import ChatWindow from './Game/ChatWindow'
 import Waiting from './Game/Waiting'
 import Board from './Game/Board'
 import Players from './Game/Players'
+import Ended from './Game/Ended'
 const axios = require('axios')
 
 const Game = ({spectate}) => {
@@ -57,11 +58,19 @@ const Game = ({spectate}) => {
 
     function gameWindow () {
         if(gameState.status === 'waiting')
-            return(<Waiting players={gameState.players.length}
-                            playerIndex={gameState.players.findIndex(n => n.id === player.id)}
-                            gameId={gameState.id}/>)
+            return(
+            <Waiting players={gameState.players.length}
+                     playerIndex={gameState.players.findIndex(n => n.id === player.id)}
+                     gameId={gameState.id}/>
+            )
         else if(gameState.status === 'ingame')
-            return(<Board   gameState={gameState} player={player} spectator={spectate}/>)
+            return(
+                <Board   gameState={gameState} player={player} spectator={spectate}/>
+            )
+        else
+            return(
+                <Ended winners={gameState.winners}/>
+            )
     }
 
     function render() {
