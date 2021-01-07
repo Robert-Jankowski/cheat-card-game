@@ -4,7 +4,6 @@ import Chat from './components/Chat'
 import Game from './components/Game'
 import Games from './components/Games'
 import Login from './components/Login'
-import GameSpectated from './components/GameSpectated'
 import { useStoreState, useStoreActions } from 'easy-peasy';
 const mqtt = require('mqtt')
 const brokerAddress = "localhost:8000/mqtt"
@@ -17,11 +16,11 @@ function App() {
       case 'games':
         return <Games />
       case 'game':
-        return <Game />
+        return <Game spectate={false}/>
       case 'chat':
         return <Chat />
       case 'spectate':
-        return <GameSpectated />
+        return <Game spectate={true}/>
       default:
         return <Login />
     }

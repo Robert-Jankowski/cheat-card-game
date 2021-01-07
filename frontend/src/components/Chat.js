@@ -58,9 +58,11 @@ const Chat = () => {
     const Users = () => {
         return (
             <ul>
-                {chatState.users.map(n => {
+                {chatState.users.map((n,i) => {
                     return (
-                        <li>{n.nick}</li>
+                        <li key={`user${i}`}>
+                        {n.nick}
+                        </li>
                     )
                 })}
             </ul>
