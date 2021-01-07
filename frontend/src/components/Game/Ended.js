@@ -7,7 +7,7 @@ const Ended = ({winners}) => {
             {winners.map((n,i) => {
                 return(
                     <li className="winner" key={`winner${i}`}>
-                        <p>{i}</p>
+                        <p>{i+1}</p>
                         <p>{n.nick}</p>
                     </li>
                 )

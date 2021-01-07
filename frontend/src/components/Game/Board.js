@@ -32,7 +32,7 @@ const Board = ({ gameState, player, spectator }) => {
             <ul id="selected">
                 {selectedCards.map((n, i) => {
                     return (
-                        <li class="selectedcard" key={`selected${i}`}>
+                        <li className="selectedcard" key={`selected${i}`}>
                             {n}
                             <button onClick={() => {
                                 setSelectedCards(selectedCards.filter(m => m !== n))
@@ -129,6 +129,8 @@ const Board = ({ gameState, player, spectator }) => {
         else
             return(
                 <React.Fragment>
+                    <Declared />
+                    <Pile />
                     <Hand />
                     <Selected />
                     {DeclaredInput()}

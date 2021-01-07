@@ -63,6 +63,7 @@ app.post('/games/:gameId/move', (req, res) => {
     const {player_index, cards, declared} = req.body
     const game = db.games.find(n => n.id === game_id)
     game.move(parseInt(player_index),cards, declared)
+    game.checkEnded()
     sendGameStates(game.id)
     return res.send('success')
 })
@@ -71,6 +72,7 @@ app.post('/games/:gameId/move', (req, res) => {
 app.post('/games/:gameId/draw3', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
     game.draw3(req.body.player_index)
+    game.checkEnded()
     sendGameStates(game.id)
     return res.send('success')
 })
@@ -79,6 +81,7 @@ app.post('/games/:gameId/draw3', (req, res) => {
 app.post('/games/:gameId/check', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
     game.check(req.body.player_index)
+    game.checkEnded()
     sendGameStates(game.id)
     return res.send('success')
 })
@@ -106,6 +109,7 @@ app.patch('/games/:gameId/join', (req, res) => {
 app.patch('/games/:gameId/leave', (req, res) => {
     const game = db.games.find(n => n.id === req.params.gameId)
     game.leave(req.body.player_id)
+    game.checkEnded()
     sendGameStates(game.id)
     if(game.players.length === 0)
         db.games = db.games.filter(n => n === n.id === req.params.gameId)

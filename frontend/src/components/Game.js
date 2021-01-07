@@ -78,7 +78,7 @@ const Game = ({spectate}) => {
             return(
                 <React.Fragment>
                     <LeaveButton />
-                    <Players players={gameState.players} turn={gameState.turn}/>
+                    <Players players={gameState.players} turn={gameState.turn} winners={gameState.winners}/>
                     {gameWindow()}
                     <ChatWindow gameState={gameState} nick={player.nick}/>
                 </React.Fragment>

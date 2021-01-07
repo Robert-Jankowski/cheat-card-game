@@ -27,8 +27,6 @@ function Game(id, player, deck) {
             parseInt(card)
         }
         if(this.status === 'ingame' &&
-        cards.length <= 4 &&
-         this.turn === playerIndex &&
           mapDeclared(declared) >= mapDeclared(this.declared.value) &&
            !this.winners.includes(this.players[playerIndex])) {
             this.pile = [...cards, ...this.pile]
@@ -43,7 +41,7 @@ function Game(id, player, deck) {
             }
             if(playerIndex < 1) {
                 if(this.players[this.players.length - 1].hand.length === 0) {
-                    this.winners.push(this.players[playerIndex - 1])
+                    this.winners.push(this.players[this.players.length - 1])
                 }
             }
             else {
@@ -82,10 +80,10 @@ function Game(id, player, deck) {
             this.declared = {value: '2', number: null, player: null}
         }
     }
-    this.draw3 = (player_index) => {
+    this.draw3 = (playerIndex) => {
 
         if(this.pile.length > 3) {
-            this.draw(player_index, 3)
+            this.draw(playerIndex, 3)
             this.declared = {value: '2', number: null, player: null}
             this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
             if(this.winners.includes(this.players[this.turn])) {
@@ -94,14 +92,14 @@ function Game(id, player, deck) {
                 else
                     this.turn = this.turn + 1
             }
-            if(player_index < 1) {
+            if(playerIndex < 1) {
                 if(this.players[this.players.length - 1].hand.length === 0) {
-                    this.winners.push(this.players[player_index - 1])
+                    this.winners.push(this.players[this.players.length - 1])
                 }
             }
             else {
-                if(this.players[player_index - 1].hand.length === 0) {
-                    this.winners.push(this.players[player_index - 1])
+                if(this.players[playerIndex - 1].hand.length === 0) {
+                    this.winners.push(this.players[playerIndex - 1])
                 }
             }
         }
@@ -109,15 +107,20 @@ function Game(id, player, deck) {
     this.sendMessage = (nick, message) => {
         this.messages.push({nick, message})
     }
-    this.leave = (player_index) => {
-        const player = this.players.find(n => n.id === player_index)
+    this.leave = (playerIndex) => {
+        const player = this.players.find(n => n.id === playerIndex)
         this.pile = [...this.pile, ...player.hand]
         player.hand = []
-        if(this.turn === player_index) {
+        if(this.turn === playerIndex) {
             this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
         }
         this.declared = {value: "2", number: 1, player: null}
-        this.players = this.players.filter(n => n.id !== player_index)
+        this.players = this.players.filter(n => n.id !== playerIndex)
+    }
+    this.checkEnded = () => {
+        if(this.winners.length >= this.players.length - 1)
+            this.status = 'ended'
+
     }
 }
 exports.Game = Game
