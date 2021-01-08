@@ -34,11 +34,10 @@ const ChatForm = ({ setPath, setChatId, player }) => {
 
     return (
         <div id="chatform">
-            <p>CHATS</p>
-            <input id="nameinput" placeholder={"chatroom name"} onChange={(e) => setChatForm({ ...chatForm, name: e.target.value })} />
-            <input id="passwordinput" placeholder={"chatroom password"} onChange={(e) => setChatForm({ ...chatForm, password: e.target.value })} />
-            <button id="joinchatbutton" onClick={() => handleJoinChat()}>JOIN CHATROOM</button>
-            <button id="createchatbutton" onClick={() => handleCreateChat()}>CREATE CHATROOM</button>
+            <input className="chatsinput" placeholder={"chatroom name"} onChange={(e) => setChatForm({ ...chatForm, name: e.target.value })} />
+            <input className="chatsinput" placeholder={"chatroom password"} onChange={(e) => setChatForm({ ...chatForm, password: e.target.value })} />
+            <button className="chatsbutton" onClick={() => handleJoinChat()}>JOIN CHATROOM</button>
+            <button className="chatsbutton" onClick={() => handleCreateChat()}>CREATE CHATROOM</button>
         </div>
     )
 }

@@ -6,7 +6,7 @@ const GamesList = ({ setGameId, setGameSpectatedId, setPath, player, games }) =>
     const JoinButton = ({ game }) => {
         if (game.status === 'waiting') {
             return (
-                <button className="joinbutton" onClick={() => {
+                <div className="joinbutton" onClick={() => {
                     axios.patch(`http://localhost:4000/games/${game.id}/join`, { player_id: player.id }).then(res => {
                         setGameId(game.id)
                         setPath('game')
@@ -14,39 +14,40 @@ const GamesList = ({ setGameId, setGameSpectatedId, setPath, player, games }) =>
                         console.log(error)
                     })
 
-                }}>JOIN</button>
+                }}><img src="join-game.png" alt="JOIN" width={50} height={50}/></div>
             )
         }
         else {
             return (
-                <button disabled>JOIN</button>
+                <div className="joinbutton"><img src="closed-game.png" alt="SPECTATE" width={50} height={50}/></div>
             )
         }
     }
 
     const SpectateButton = ({ game }) => {
         return (
-            <button className="spectatebutton" onClick={() => {
+            <div className="spectatebutton" onClick={() => {
                 setGameSpectatedId(game.id)
                 setPath('spectate')
-            }}>SPECTATE</button>
+            }}><img src="spectate-game.png" alt="SPECTATE" width={50} height={50}/></div>
         )
     }
 
     const GameTile = ({ game }) => {
         return (
             <div className="gametile">
-                <p>Players: {game.players}/8</p>
-                <p>Status: {game.status}</p>
+                <div className="gamesinfo">
+                <p>{game.players}/8</p>
+                <p>{game.status}</p>
+                </div>
                 <JoinButton game={game} />
                 <SpectateButton game={game} />
-
             </div>
         )
     }
     const CreateGameButton = () => {
         return (
-            <button id="creategamebutton" onClick={() => {
+            <button id="creategamebutton" class="gametile" onClick={() => {
                 axios.post('http://localhost:4000/games', { player_id: player.id }).then(res => {
                     setGameId(res.data)
                     setPath('game')

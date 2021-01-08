@@ -1,3 +1,4 @@
+import '../styles/Games.css'
 import React, {useEffect, useState} from 'react'
 import {useStoreState, useStoreActions} from 'easy-peasy'
 import GamesList from './Games/GamesList'
