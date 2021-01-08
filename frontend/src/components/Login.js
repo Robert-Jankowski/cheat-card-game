@@ -1,3 +1,4 @@
+import '../styles/Login.css'
 import React, { useState } from 'react'
 import { useStoreActions } from 'easy-peasy'
 import 'axios'
@@ -30,8 +31,10 @@ const Login = () => {
 
     return (
         <main id="login">
-            <EnterButton />
+            <div id="inputformcontainer">
             {NickInput()}
+            <EnterButton />
+            </div>
         </main>
     )
 }

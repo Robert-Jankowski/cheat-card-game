@@ -1,0 +1,43 @@
+/* https://coolors.co/ffffff-84dcc6-a5ffd6-ffa69e-ff686b */
+
+* {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+#login {    
+    width: 100vw;
+    height: 100vh;
+    background-color:#A5FFD6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#inputformcontainer {
+    display: flex;
+    height: 60px;
+    width: 350px;
+    justify-content: center;
+}
+
+#nickinput {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 1.5em;
+    padding-left: 2%;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+#enterbutton {
+    width: 40%;
+    background-color: #FF686B;
+    font-size: 1.5em;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transition: .5s;
+}
+#enterbutton:hover {
+    background-color: #FFA69E;
+}
