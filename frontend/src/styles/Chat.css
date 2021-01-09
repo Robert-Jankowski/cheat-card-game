@@ -1,0 +1,78 @@
+
+* {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+#chat {
+    width: 100vw;
+    height: 100vh;
+    background-color:#A5FFD6;
+    text-align: left;
+}
+
+#chatsleave {
+    margin: 1%;
+    background-color: #FF686B;
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 20px;
+    transition: .5s;
+}
+#chatsinput {
+    margin: 1%;
+    margin-right: 0;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 250px;
+    font-size: 1.5em;
+    padding-left: 2%;
+    margin-bottom: 1%;
+    padding: 0.5em;
+}
+#chatssend {
+    background-color: #FF686B;
+    padding: 0.5em;
+    font-size: 1.5em;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transition: .5s;
+}
+#chatsmessages {
+    margin: 1%;
+    list-style: none;
+    overflow: auto;
+    height: 400px;
+}
+#chatsusers {
+    margin: 1%;
+    list-style: none;
+    width: 250px;
+}
+.chatsuser {
+    background-color: #FFFFFF;
+    width: fit-content;
+    padding: 3%;
+    margin: 3%;
+    border-radius: 20px;
+    border: 2px solid  #ff262a;;
+}
+
+.chatsmessage {
+    margin: .5%;
+    margin-left: 0;
+}
+.messageauthor {
+    color: #ff262a;
+    font-weight: bold;
+}
+.messagetext {
+    background-color: #ffffff;
+    padding: 0.2em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: fit-content;
+}

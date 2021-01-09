@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useStoreState, useStoreActions } from 'easy-peasy'
+import '../styles/Chat.css'
 const axios = require('axios')
 
 const Chat = () => {
@@ -28,7 +29,7 @@ const Chat = () => {
 
     const SendButton = () => {
         return (
-            <button onClick={() => {
+            <button id="chatssend" onClick={() => {
                 if (messageInput !== "") {
                     axios.post(`http://localhost:4000/chats/${chatState.id}/message`, { nick: player.nick, message: messageInput })
                         .catch(error => console.log(error))
@@ -41,7 +42,7 @@ const Chat = () => {
 
     const LeaveButton = () => {
         return (
-            <button onClick={() => {
+            <button id="chatsleave" onClick={() => {
                 axios.patch(`http://localhost:4000/chats/${chatState.id}/leave`, { player_id: player.id }).then(res => {
                     setPath('games')
                     setChatId(null)
@@ -51,16 +52,16 @@ const Chat = () => {
     }
     const Input = () => {
         return (
-            <input placeholder={"send message"} onChange={(e) => setMessageInput(e.target.value)} />
+            <input id="chatsinput" placeholder={"send message"} onChange={(e) => setMessageInput(e.target.value)} />
         )
 
     }
     const Users = () => {
         return (
-            <ul>
+            <ul id="chatsusers">
                 {chatState.users.map((n,i) => {
                     return (
-                        <li key={`user${i}`}>
+                        <li className="chatsuser" key={`user${i}`}>
                         {n.nick}
                         </li>
                     )
@@ -70,11 +71,12 @@ const Chat = () => {
     }
     const Messages = () => {
         return (
-            <ul>
-                {chatState.messages.map((n, i) => {
+            <ul id="chatsmessages">
+                {[...chatState.messages].reverse().map((n, i) => {
                     return (
-                        <li key={`message${i}`}>
-                            {`${n.user}: ${n.message}`}
+                        <li className="chatsmessage" key={`message${i}`}>
+                            <p className="messageauthor">{n.user}</p>
+                            <p className="messagetext">{n.message}</p>
                         </li>
                     )
                 })}
@@ -98,7 +100,7 @@ const Chat = () => {
     }
 
     return (
-        <main className="chat">
+        <main id="chat">
             {render()}
         </main>
     )
