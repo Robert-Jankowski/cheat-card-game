@@ -112,7 +112,7 @@ app.patch('/games/:gameId/leave', (req, res) => {
     game.checkEnded()
     sendGameStates(game.id)
     if(game.players.length === 0)
-        db.games = db.games.filter(n => n === n.id === req.params.gameId)
+        db.games = db.games.filter(n => n.id !== req.params.gameId)
     sendGamesList(db.games)
     return res.send('success')
 })
