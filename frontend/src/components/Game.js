@@ -5,6 +5,7 @@ import Waiting from './Game/Waiting'
 import Board from './Game/Board'
 import Players from './Game/Players'
 import Ended from './Game/Ended'
+import '../styles/Game.css'
 const axios = require('axios')
 
 const Game = ({spectate}) => {

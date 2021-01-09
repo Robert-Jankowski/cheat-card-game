@@ -1,0 +1,44 @@
+#game {
+    width: 100vw;
+    height: 100vh;
+    background-color:#A5FFD6;
+    display: grid;
+    grid-template-columns: 1fr 6fr 3fr;
+    grid-template-rows: 1fr 3fr 10fr;
+    grid-template-areas: 
+    "button . ."
+    "game game players"
+    "game game chat";
+}
+#leavebutton {
+    grid-area: button;
+}
+
+#playerslist {
+    grid-area: players;
+}
+#chatwindow {
+    grid-area: chat;
+}
+#board {
+    grid-area: game;
+}
+#messages {
+    overflow: auto;
+    height: 450px;
+}
+#hand {
+    box-sizing: border-box;
+    height: 30%;
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-gap: .1em;
+    list-style: none;
+}
+.card {
+    transition: .5s;
+}
+.card:hover {
+    transform: scale(1.2);
+}

@@ -11,38 +11,49 @@ const Board = ({ gameState, player, spectator }) => {
         setDeclared("2")
     }, [gameState]);
 
+    function nameToCard(name) {
+        const [color, value] = name.split(':')
+        return `cards/${color}-${value}.png`
+    }
+
     const Hand = () => {
         return (
             <ul id="hand">
                 {gameState.hand.map((n, i) => {
                     return (
                         <li className="card" key={`card${i}`}>
-                            {n}
-                            {!selectedCards.includes(n) ? <button onClick={() => setSelectedCards([...selectedCards, n])}>
-                                {'>'}
-                            </button> : <button disabled>{'>'}</button>}
-                        </li>
-                    )
-                })}
-            </ul>
-        )
-    }
-    const Selected = () => {
-        return (
-            <ul id="selected">
-                {selectedCards.map((n, i) => {
-                    return (
-                        <li className="selectedcard" key={`selected${i}`}>
-                            {n}
-                            <button onClick={() => {
+                            <img src={nameToCard(n)}
+                            height={50}
+                            height={100}
+                            onClick={() => {
+                                if(!selectedCards.includes(n))
+                                    setSelectedCards([...selectedCards, n])
+                                else
                                 setSelectedCards(selectedCards.filter(m => m !== n))
-                            }}>{'<'}</button>
+                            }}
+                            style={{border: selectedCards.includes(n) ? "solid 2px red": "none"}}/>
                         </li>
                     )
                 })}
             </ul>
         )
     }
+    // const Selected = () => {
+    //     return (
+    //         <ul id="selected">
+    //             {selectedCards.map((n, i) => {
+    //                 return (
+    //                     <li className="selectedcard" key={`selected${i}`}>
+    //                         {n}
+    //                         <button onClick={() => {
+    //                             setSelectedCards(selectedCards.filter(m => m !== n))
+    //                         }}>{'<'}</button>
+    //                     </li>
+    //                 )
+    //             })}
+    //         </ul>
+    //     )
+    // }
     const Move = () => {
         
         function validateValues(card) {
@@ -132,7 +143,7 @@ const Board = ({ gameState, player, spectator }) => {
                     <Declared />
                     <Pile />
                     <Hand />
-                    <Selected />
+                    {/* <Selected /> */}
                     {DeclaredInput()}
                     <Move />
                     <Draw />
