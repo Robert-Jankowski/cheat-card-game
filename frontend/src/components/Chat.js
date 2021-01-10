@@ -33,6 +33,7 @@ const Chat = () => {
                 if (messageInput !== "") {
                     axios.post(`http://localhost:4000/chats/${chatState.id}/message`, { nick: player.nick, message: messageInput })
                         .catch(error => console.log(error))
+                    setMessageInput('')
                 }
             }}>SEND
             </button>
@@ -52,7 +53,7 @@ const Chat = () => {
     }
     const Input = () => {
         return (
-            <input id="chatsinput" placeholder={"send message"} onChange={(e) => setMessageInput(e.target.value)} />
+            <input id="chatsinput" placeholder={"send message"} value={messageInput} onChange={(e) => setMessageInput(e.target.value)} />
         )
 
     }

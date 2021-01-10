@@ -7,7 +7,7 @@ const ChatWindow = ({ gameState, nick }) => {
 
     const InputMessage = () => {
         return (
-            <input id="inputmessage" placeholder={"message"} onChange={(e) => setMessageInput(e.target.value)} />
+            <input id="inputmessage" placeholder={"message"} value={messageInput} onChange={(e) => setMessageInput(e.target.value)} />
         )
     }
     const SendButton = () => {
@@ -16,6 +16,7 @@ const ChatWindow = ({ gameState, nick }) => {
                 if (messageInput !== "") {
                     axios.post(`http://localhost:4000/games/${gameState.id}/message`, { nick: nick, message: messageInput })
                         .catch(error => console.log(error))
+                        setMessageInput('')
                 }
             }}>SEND</button>
         )
