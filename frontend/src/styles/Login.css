@@ -40,4 +40,5 @@
 }
 #enterbutton:hover {
     background-color: #FFA69E;
+    cursor: pointer;
 }

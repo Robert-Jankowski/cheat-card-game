@@ -20,6 +20,10 @@
     border-radius: 20px;
     transition: .5s;
 }
+#chatsleave:hover {
+    cursor: pointer;
+    background-color: #FFA69E;
+}
 #chatsinput {
     margin: 1%;
     margin-right: 0;
@@ -38,6 +42,10 @@
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     transition: .5s;
+}
+#chatssend:hover {
+    cursor: pointer;
+    background-color: #FFA69E;
 }
 #chatsmessages {
     margin: 1%;

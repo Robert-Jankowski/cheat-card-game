@@ -21,6 +21,10 @@
     border-radius: 20px;
     transition: .5s;
 }
+#leavebutton:hover {
+    background-color:  #FFA69E;
+    cursor: pointer;
+}
 
 #board {
     grid-area: game;
@@ -192,6 +196,11 @@
     border-bottom-right-radius: 20px;
     transition: .5s;
 }
+#sendbutton:hover {
+    background-color:  #FFA69E;
+    cursor: pointer;
+}
+
 #inputmessage {
     margin-right: 0;
     background-color: #FFFFFF;
@@ -212,7 +221,13 @@
     font-size: 1.2em;
     padding: 0.5em;
     border-radius: 20px;
+    transition: .5s;
 }
+.gamebuttons:hover {
+    background-color:  #FFA69E;
+    cursor: pointer;
+}
+
 .disabledgamebuttons {
     justify-self: center;
     align-self: center;
@@ -231,6 +246,7 @@
     width: 40%;
     height: 20%;
 }
-.declareoption {
-
+#startbutton:hover {
+    cursor: pointer;
+    background-color: #FFA69E;
 }

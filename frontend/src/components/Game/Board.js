@@ -8,7 +8,7 @@ const Board = ({ gameState, player, spectator }) => {
 
         useEffect(() => {
         setSelectedCards([])
-        setDeclared("")
+        setDeclared(gameState.declared.value)
     }, [gameState]);
 
     function nameToCard(name) {
@@ -76,7 +76,8 @@ const Board = ({ gameState, player, spectator }) => {
 
         return(
             <select id="declareoptions" onChange={(e) => setDeclared(e.target.value)}
-                    defaultValue={{ label: "Select Dept", value: "" }}>
+                    defaultValue={'default'}>
+                    <option value='default' disabled>--- DECLARE VALUE ---</option>
                 {filtered.map(n => {
                     return(
                         <option key={n} className={n} className="declareoption" value={n}>{n}</option>
