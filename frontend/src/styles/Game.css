@@ -1,4 +1,6 @@
 #game {
+    font-family: 'Courier', Courier, monospace;
+    font-weight: bold;
     width: 100vw;
     height: 100vh;
     background-color:#A5FFD6;
@@ -12,27 +14,97 @@
 }
 #leavebutton {
     grid-area: button;
+    margin: 1%;
+    background-color: #FF686B;
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 20px;
+    transition: .5s;
 }
 
-#playerslist {
-    grid-area: players;
-}
-#chatwindow {
-    grid-area: chat;
-}
 #board {
     grid-area: game;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 2fr 1fr 3fr;
+    grid-template-areas:
+    "declared pile ."
+    "move draw check"
+    "hand hand hand";
 }
-#messages {
-    overflow: auto;
-    height: 450px;
+#waiting {
+    grid-area: game;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+#waiting > p {
+    font-size: 1.5em;
+    background-color: white;
+    padding: .7%;
+    margin: .5%;
+    border-radius: 30px;
+    border: 2px solid red;
+}
+#waiting > button {
+    background-color: #FF686B;
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 20px;
+}
+
+#declared {
+    grid-area: declared;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#declaredcards {
+    list-style: none;
+    display: flex;
+}
+#declared > p {
+    background-color: white;
+    position: absolute;
+    background-color: white;
+    border-radius: 20px;
+    padding: 1.5%;
+    border: 2px solid black;
+}
+
+#checkbutton {
+    grid-area: check;
+}
+#drawbutton {
+    grid-area: draw;
+}
+#pile {
+    text-align: center;
+    grid-area: pile;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+#pile > p {
+    background-color: white;
+    border-radius: 20px;
+    position: absolute;
+    padding: 1.5%;
+    border: 2px solid black;
+} 
+
+
 #hand {
+    grid-area: hand;
     box-sizing: border-box;
     height: 30%;
     width: 80%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
     grid-gap: .1em;
     list-style: none;
 }
@@ -41,4 +113,124 @@
 }
 .card:hover {
     transform: scale(1.2);
+}
+
+#playerslist {
+    grid-area: players;
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    width: 70%;
+}
+.player {
+    width: max-content;
+    background-color: #FFFFFF;
+    padding: 3%;
+    margin-bottom: 3%;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+.player > p {
+    margin-bottom: 2%;
+}
+
+#ended {
+    grid-area: game;
+    margin-left: auto;
+    margin-right: auto;
+}
+#winnerslist {
+    list-style: none;
+}
+.winner {
+    display: flex;
+    
+}
+.winner > p {
+    margin-right: 30%;
+    margin-bottom: 10%;
+    padding: 10%;
+    font-size: 2em;
+    background-color: white;
+    width: fit-content;
+    border-radius: 20px;
+    border: solid 2px red
+}
+#chatwindow {
+    grid-area: chat;
+    margin-top: 3%;
+}
+
+#gamemessages {
+    list-style: none;
+    overflow: auto;
+    height: 300px;
+}
+.gamemessage {
+    margin: .5%;
+    margin-left: 0;
+}
+.gamemessageauthor {
+    color: #ff262a;
+    font-weight: bold;
+}
+.gamemessagetext {
+    background-color: #ffffff;
+    padding: 0.2em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: fit-content;
+}
+#sendbutton {
+    background-color: #FF686B;
+    padding: 0.5em;
+    font-size: 1.5em;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transition: .5s;
+}
+#inputmessage {
+    margin-right: 0;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 250px;
+    font-size: 1.5em;
+    padding-left: 2%;
+    margin-bottom: 1%;
+    padding: 0.5em;
+}
+.gamebuttons {
+    justify-self: center;
+    align-self: center;
+    width: 40%;
+    height: 50%;
+    margin: 1%;
+    background-color: #FF686B;
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 20px;
+}
+.disabledgamebuttons {
+    justify-self: center;
+    align-self: center;
+    width: 40%;
+    height: 50%;
+    margin: 1%;
+    background-color: #FF686B;
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 20px;
+    opacity: 0.8; 
+}
+#declareoptions {
+    justify-self: center;
+    align-self: center;
+    width: 40%;
+    height: 20%;
+}
+.declareoption {
+
 }

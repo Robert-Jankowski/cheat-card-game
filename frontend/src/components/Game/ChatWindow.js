@@ -22,11 +22,13 @@ const ChatWindow = ({ gameState, nick }) => {
     }
     const Messages = () => {
         return (
-            <ul id="messages">
+            <ul id="gamemessages">
                 {[...gameState.messages].reverse().map((n, i) => {
                     return (
-                        <li className="message" key={`message${i}`}>
-                            {`${n.nick}: ${n.message}`}
+                        <li className="gamemessage" key={`message${i}`}>
+                            <p className="gamemessageauthor">{n.nick}</p>
+                            <p className="gamemessagetext">{n.message}</p>
+                            <p></p>
                         </li>
                     )
                 })}

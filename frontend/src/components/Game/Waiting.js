@@ -20,7 +20,7 @@ const Waiting = ({players, gameId, playerIndex}) => {
     }
 
     return(
-        <div id="board">
+        <div id="waiting">
             <p>{`${players}/8`}</p>
             {isOwner()}
         </div>

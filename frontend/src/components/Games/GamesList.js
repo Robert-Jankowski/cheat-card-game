@@ -47,7 +47,7 @@ const GamesList = ({ setGameId, setGameSpectatedId, setPath, player, games }) =>
     }
     const CreateGameButton = () => {
         return (
-            <button id="creategamebutton" class="gametile" onClick={() => {
+            <button id="creategamebutton" className="gametile" onClick={() => {
                 axios.post('http://localhost:4000/games', { player_id: player.id }).then(res => {
                     setGameId(res.data)
                     setPath('game')
