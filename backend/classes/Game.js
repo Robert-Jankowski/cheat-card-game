@@ -118,7 +118,7 @@ function Game(id, player, deck) {
         this.players = this.players.filter(n => n.id !== playerIndex)
     }
     this.checkEnded = () => {
-        if(this.winners.length >= this.players.length - 1)
+        if(this.winners.length >= this.players.length - 1 && this.status === 'ingame')
             this.status = 'ended'
 
     }
