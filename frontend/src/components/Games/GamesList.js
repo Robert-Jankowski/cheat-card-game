@@ -4,7 +4,7 @@ const axios = require('axios')
 const GamesList = ({ setGameId, setGameSpectatedId, setPath, player, games }) => {
 
     const JoinButton = ({ game }) => {
-        if (game.status === 'waiting') {
+        if (game.status === 'waiting' && game.players < 8) {
             return (
                 <div className="joinbutton" onClick={() => {
                     axios.patch(`http://localhost:4000/games/${game.id}/join`, { player_id: player.id }).then(res => {
@@ -19,7 +19,7 @@ const GamesList = ({ setGameId, setGameSpectatedId, setPath, player, games }) =>
         }
         else {
             return (
-                <div className="joinbutton"><img src="closed-game.png" alt="SPECTATE" width={50} height={50}/></div>
+                <div className="joinbutton"><img src="closed-game.png" alt="JOIN" width={50} height={50}/></div>
             )
         }
     }
