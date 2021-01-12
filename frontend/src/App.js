@@ -7,7 +7,6 @@ import Login from './components/Login'
 import { useStoreState, useStoreActions } from 'easy-peasy';
 const mqtt = require('mqtt')
 const brokerAddress = "localhost:8000/mqtt"
-const axios = require('axios')
 const client = mqtt.connect(`mqtt://${brokerAddress}`)
 function App() {
 

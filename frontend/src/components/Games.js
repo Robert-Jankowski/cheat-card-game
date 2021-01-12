@@ -1,5 +1,5 @@
 import '../styles/Games.css'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import {useStoreState, useStoreActions} from 'easy-peasy'
 import GamesList from './Games/GamesList'
 import ChatForm from './Games/ChatForm'

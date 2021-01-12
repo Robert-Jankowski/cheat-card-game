@@ -80,7 +80,7 @@ const Board = ({ gameState, player, spectator }) => {
                     <option value='default' disabled>--- DECLARE VALUE ---</option>
                 {filtered.map(n => {
                     return(
-                        <option key={n} className={n} className="declareoption" value={n}>{n}</option>
+                        <option key={n} className="declareoption" value={n}>{n}</option>
                     )
                 })}
             </select>
@@ -114,7 +114,7 @@ const Board = ({ gameState, player, spectator }) => {
     const Draw = () => {
         if(gameState.turn === gameState.players.findIndex(n => n.id === player.id))
             return(
-                <button className="drawbutton" className="gamebuttons" onClick={() => {
+                <button id="drawbutton" className="gamebuttons" onClick={() => {
                     axios.post(`http://localhost:4000/games/${gameState.id}/draw3`,{
                         player_index: gameState.turn,
                     }).catch(error => console.log(error))
@@ -127,7 +127,8 @@ const Board = ({ gameState, player, spectator }) => {
     }
     const Check = () => {
         const player_index = gameState.players.findIndex(n => n.id === player.id)
-            return gameState.declared.player !== player_index  && !gameState.winners.includes(gameState.players[player_index]) ? (
+        const ifNotWinner = ![...gameState.winners.map(n => n.id)].includes(player.id)
+            return gameState.declared.player !== player_index  && ifNotWinner ? (
                 <button id="checkbutton" className="gamebuttons" onClick={() => {
                     axios.post(`http://localhost:4000/games/${gameState.id}/check`,{
                         player_index: player_index
