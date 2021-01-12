@@ -26,21 +26,23 @@ function App() {
   }
   
   const {
-    setGameState, setChatState, setGames} = useStoreActions(
+    setGameState, setChatState, setGames, setSubscribed} = useStoreActions(
     actions => ({
       setGameState: actions.setGameState,
       setChatState: actions.setChatState,
-      setGames: actions.setGames
+      setGames: actions.setGames,
+      setSubscribed: actions.setSubscribed
     })
   )
   const {
-    gameSpectatedId, gameId, chatId, player, path} = useStoreState(
+    gameSpectatedId, gameId, chatId, player, path, isSubscribed} = useStoreState(
     state => ({
       gameSpectatedId: state.gameSpectatedId,
       gameId: state.gameId,
       chatId: state.chatId,
       player: state.player,
       path: state.path,
+      isSubscribed: state.isSubscribed
     })
   )
 
@@ -67,15 +69,38 @@ function App() {
   })},[])
 
   useEffect(() => {
-    client.subscribe(`privatestate/${gameId}/${player.id}`)
+    if(!isSubscribed.game) {
+      client.subscribe(`privatestate/${gameId}/${player.id}`)
+      setSubscribed({...isSubscribed, game: true})
+    }  
+    else {
+      client.unsubscribe(`privatestate/${gameId}/${player.id}`)
+      setSubscribed({...isSubscribed, game: false})
+    }
   },[gameId])
 
   useEffect(() => {
-    client.subscribe(`chats/${chatId}`)
+    
+    if(!isSubscribed.chat) {
+      client.subscribe(`chats/${chatId}`)
+      setSubscribed({...isSubscribed, chat: true})
+    }  
+    else {
+      client.unsubscribe(`chats/${chatId}`)
+      setSubscribed({...isSubscribed, chat: false})
+    }
   },[chatId])
 
   useEffect(() => {
-    client.subscribe(`publicstate/${gameSpectatedId}`)
+    if(!isSubscribed.game) {
+      client.subscribe(`publicstate/${gameSpectatedId}`)
+      setSubscribed({...isSubscribed, gameSpectated: true})
+    }  
+    else {
+      client.unsubscribe(`publicstate/${gameSpectatedId}`)
+      setSubscribed({...isSubscribed, gameSpectated: false})
+    }
+    
   },[gameSpectatedId])
 
 

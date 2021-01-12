@@ -12,6 +12,11 @@ const store = createStore({
    gameId: null,
    gameSpectatedId: null,
    chatId: null,
+   isSubscribed: {
+       game: false,
+       gameSpectated: false,
+       chat: false
+   },
 
    setPlayer: action((state, payload) => {
        state.player = {id: payload.id, nick: payload.nick}
@@ -37,5 +42,8 @@ const store = createStore({
    setChatState: action((state, payload) => {
     state.chatState = payload
    }),
+   setSubscribed: action((state, payload) => {
+       state.isSubscribed = payload
+   })
 })
 export default store
