@@ -23,7 +23,11 @@ const Game = ({spectate}) => {
         setGameState: action.setGameState
     }))
 
-    
+   window.addEventListener("beforeunload", (e) => {
+       if(!spectate)
+       axios.patch(`http://localhost:4000/games/${gameState.id}/leave`, {player_id: player.id})
+            .catch(error => console.log(error))
+   })
 
     useEffect(() => {
         if(spectate) {
