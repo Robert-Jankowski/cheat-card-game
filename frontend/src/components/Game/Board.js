@@ -112,7 +112,7 @@ const Board = ({ gameState, player, spectator }) => {
             )
     }
     const Draw = () => {
-        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id))
+        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id) && gameState.pile > 3)
             return(
                 <button id="drawbutton" className="gamebuttons" onClick={() => {
                     axios.post(`http://localhost:4000/games/${gameState.id}/draw3`,{

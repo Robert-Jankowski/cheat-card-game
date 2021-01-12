@@ -1,3 +1,7 @@
+const { checkIfPreviousPlayerWinning } = require('../helpers/checkIfPreviousPlayerWinning')
+const { skipTurnIfWinner } = require('../helpers/skipTurnIfWinner')
+const { setNewTurn } = require('../helpers/setNewTurn')
+
 function Game(id, player, deck) {
     this.id = id
     this.players = [player]
@@ -14,52 +18,66 @@ function Game(id, player, deck) {
     this.messages = []
 
     this.join = (player) => {
-        if(this.status !== 'ingame')
+        if (this.status !== 'ingame')
             this.players.push(player)
     }
-    this.move = (playerIndex, cards, declared) => {
-        
-        function mapDeclared(card) {
-            return card === "J" ? 11 :
-            card === "Q" ? 12 :
-            card === "K" ? 13 :
-            card === "A" ? 14 :
-            parseInt(card)
-        }
-        if(this.status === 'ingame' &&
-          mapDeclared(declared) >= mapDeclared(this.declared.value) &&
-           !this.winners.includes(this.players[playerIndex])) {
-            this.pile = [...cards, ...this.pile]
-            this.players[playerIndex].hand = this.players[playerIndex].hand.filter(n => !cards.includes(n))
-            this.declared = {value: declared, number: cards.length, player: playerIndex}
-            this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
-            if(this.winners.includes(this.players[this.turn])) {
-                if(this.turn === this.players.length - 1)
-                    this.turn = 0
-                else
-                    this.turn = this.turn + 1
-            }
-            if(playerIndex < 1) {
-                if(this.players[this.players.length - 1].hand.length === 0) {
-                    this.winners.push(this.players[this.players.length - 1])
-                }
-            }
-            else {
-                if(this.players[playerIndex - 1].hand.length === 0) {
-                    this.winners.push(this.players[playerIndex - 1])
-                }
-            }
-        }
-    }
+
     this.start = () => {
         this.status = 'ingame'
-        this.deck.map((n,i) => this.players[i%this.players.length].hand.push(n))
+        this.deck.map((n, i) => this.players[i % this.players.length].hand.push(n))
         const firstPlayerIndex = this.players.findIndex(n => n.hand.includes("hearts:2"))
         this.turn = firstPlayerIndex
         this.move(firstPlayerIndex, ["hearts:2"], "2")
     }
+
+    this.move = (playerIndex, cards, declared) => {
+        this.pile = [...cards, ...this.pile]
+        this.players[playerIndex].hand = this.players[playerIndex].hand.filter(n => !cards.includes(n))
+        this.declared = { value: declared, number: cards.length, player: playerIndex }
+        setNewTurn(this)
+        skipTurnIfWinner(this)
+        checkIfPreviousPlayerWinning(this, playerIndex)
+    }
+
+    this.draw3 = (playerIndex) => {
+        this.draw(playerIndex, 3)
+        this.declared = { value: '2', number: null, player: null }
+        setNewTurn(this)
+        skipTurnIfWinner(this)
+        checkIfPreviousPlayerWinning(this, playerIndex)
+    }
+
+    this.check = (playerIndex) => {
+        if (this.declared.number !== null) {
+            const cardsToCheck = [...this.pile.slice(0, this.declared.number)]
+            if (cardsToCheck.every(n => n.split(':')[1] === this.declared.value)) {
+                this.draw(playerIndex, this.pile.length)
+            }
+            else {
+                this.draw(this.declared.player, this.pile.length)
+            }
+            this.declared = { value: '2', number: null, player: null }
+        }
+    }
+
+    this.sendMessage = (nick, message) => {
+        this.messages.push({ nick, message })
+    }
+
+    this.leave = (playerIndex) => {
+        const player = this.players.find(n => n.id === playerIndex)
+        this.pile = [...this.pile, ...player.hand]
+        player.hand = []
+        if (this.turn === playerIndex) {
+            setNewTurn(this)
+            skipTurnIfWinner(this)
+        }
+        this.declared = { value: "2", number: 1, player: null }
+        this.players = this.players.filter(n => n.id !== playerIndex)
+    }
+
     this.draw = (playerIndex, number) => {
-        if(number >= this.pile.length) {
+        if (number >= this.pile.length) {
             this.players[playerIndex].hand = [...this.pile.splice(0, this.pile.length - 1), ...this.players[playerIndex].hand]
             this.pile = [this.pile[this.pile.length - 1]]
         }
@@ -68,57 +86,9 @@ function Game(id, player, deck) {
             this.pile = this.pile.splice(0, number + 1)
         }
     }
-    this.check = (playerIndex) => {
-        if(this.declared.number !== null) {
-            const cardsToCheck = [...this.pile.slice(0, this.declared.number)]
-            if(cardsToCheck.every(n => n.split(':')[1] === this.declared.value)) {
-                this.draw(playerIndex, this.pile.length)
-            }
-            else {
-                this.draw(this.declared.player, this.pile.length)
-            }
-            this.declared = {value: '2', number: null, player: null}
-        }
-    }
-    this.draw3 = (playerIndex) => {
 
-        if(this.pile.length > 3) {
-            this.draw(playerIndex, 3)
-            this.declared = {value: '2', number: null, player: null}
-            this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
-            if(this.winners.includes(this.players[this.turn])) {
-                if(this.turn === this.players.length - 1)
-                    this.turn = 0
-                else
-                    this.turn = this.turn + 1
-            }
-            if(playerIndex < 1) {
-                if(this.players[this.players.length - 1].hand.length === 0) {
-                    this.winners.push(this.players[this.players.length - 1])
-                }
-            }
-            else {
-                if(this.players[playerIndex - 1].hand.length === 0) {
-                    this.winners.push(this.players[playerIndex - 1])
-                }
-            }
-        }
-    }
-    this.sendMessage = (nick, message) => {
-        this.messages.push({nick, message})
-    }
-    this.leave = (playerIndex) => {
-        const player = this.players.find(n => n.id === playerIndex)
-        this.pile = [...this.pile, ...player.hand]
-        player.hand = []
-        if(this.turn === playerIndex) {
-            this.turn = this.turn === this.players.length - 1 ? 0 : this.turn + 1
-        }
-        this.declared = {value: "2", number: 1, player: null}
-        this.players = this.players.filter(n => n.id !== playerIndex)
-    }
     this.checkEnded = () => {
-        if(this.winners.length >= this.players.length - 1 && this.status === 'ingame')
+        if (this.winners.length >= this.players.length - 1 && this.status === 'ingame')
             this.status = 'ended'
 
     }
