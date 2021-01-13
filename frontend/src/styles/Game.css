@@ -251,7 +251,11 @@
     background-color: #FFA69E;
 }
 #undobutton {
+    height: 10%;
     padding: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #undoform {
     text-align: center;
@@ -259,7 +263,9 @@
 #undoform > button {
     background-color:  #FF686B;
     transition: 0.5s;
+    padding: 3%
 }
 #undoform > button:hover {
     background-color:   #FFA69E;
+    cursor: pointer;
 }

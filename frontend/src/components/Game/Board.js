@@ -9,7 +9,7 @@ const Board = ({ gameState, player, spectator }) => {
 
     useEffect(() => {
         setVoted(false)
-    },[gameState.undo_request.player])
+    },[gameState.turn])
 
         useEffect(() => {
         setSelectedCards([])
@@ -50,7 +50,7 @@ const Board = ({ gameState, player, spectator }) => {
             return possibleValues.includes(card)
         }
 
-        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id))
+        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id) && gameState.undo_request.request.player === null)
             return(
                 <button id="movebutton" className="gamebuttons" onClick={() => {
                     if(selectedCards.length >= 1 && selectedCards.length <= 4 && validateValues(declared))
@@ -117,7 +117,9 @@ const Board = ({ gameState, player, spectator }) => {
             )
     }
     const Draw = () => {
-        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id) && gameState.pile > 3)
+        if(gameState.turn === gameState.players.findIndex(n => n.id === player.id) &&
+        gameState.pile > 3 &&
+        gameState.undo_request.request.player === null)
             return(
                 <button id="drawbutton" className="gamebuttons" onClick={() => {
                     axios.post(`http://localhost:4000/games/${gameState.id}/draw3`,{
@@ -133,7 +135,7 @@ const Board = ({ gameState, player, spectator }) => {
     const Check = () => {
         const player_index = gameState.players.findIndex(n => n.id === player.id)
         const ifNotWinner = ![...gameState.winners.map(n => n.id)].includes(player.id)
-            return gameState.declared.player !== player_index  && ifNotWinner ? (
+            return gameState.declared.player !== player_index  && ifNotWinner && gameState.undo_request.request.player === null ? (
                 <button id="checkbutton" className="gamebuttons" onClick={() => {
                     axios.post(`http://localhost:4000/games/${gameState.id}/check`,{
                         player_index: player_index
@@ -153,13 +155,13 @@ const Board = ({ gameState, player, spectator }) => {
             gameState.undo_request.last_declared !== null &&
             gameState.pile > 1)
             return(
-                <button className="gamebuttons" onClick={() => {
+                <button id="undobutton" className="gamebuttons" onClick={() => {
                     axios.patch(`http://localhost:4000/games/${gameState.id}/undo`, {player: player})
                 }}>Undo</button>
             )
         else
             return(
-                <button className="disabledgamebuttons" disabled>Undo</button>
+                <button id="undobutton" className="disabledgamebuttons" disabled>Undo</button>
             )
     }
 
@@ -169,11 +171,11 @@ const Board = ({ gameState, player, spectator }) => {
             if(gameState.undo_request.request.player.id !== player.id && !voted)
                 return(
                     <React.Fragment>
-                    <button id="undobutton" className="votebuttons" onClick={() => {
+                    <button className="votebuttons" onClick={() => {
                         axios.patch(`http://localhost:4000/games/${gameState.id}/undo/yes`)
                         setVoted(true)
                     }}>YES</button>
-                    <button id="undobutton" className="votebuttons" onClick={() => {
+                    <button className="votebuttons" onClick={() => {
                         axios.patch(`http://localhost:4000/games/${gameState.id}/undo/no`)
                         setVoted(true)
                     }}>NO</button>
