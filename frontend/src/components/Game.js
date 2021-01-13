@@ -18,16 +18,18 @@ const Game = ({spectate}) => {
         gameId: store.gameId,
         gameSpectatedId: store.gameSpectatedId
     }))
-    const {setPath, setGameState} = useStoreActions(action => ({
+    const {setPath, setGameState, setGameId} = useStoreActions(action => ({
         setPath: action.setPath,
-        setGameState: action.setGameState
+        setGameState: action.setGameState,
+        setGameId: action.setGameId
     }))
 
-   window.addEventListener("beforeunload", (e) => {
-       if(!spectate)
-       axios.patch(`http://localhost:4000/games/${gameState.id}/leave`, {player_id: player.id})
-            .catch(error => console.log(error))
-   })
+//    window.addEventListener("beforeunload", (e) => {
+//        console.log("LEAVING");
+//        if(!spectate)
+//        axios.patch(`http://localhost:4000/games/${gameState.id}/leave`, {player_id: player.id})
+//             .catch(error => console.log(error))
+//    })
 
     useEffect(() => {
         if(spectate) {
@@ -48,10 +50,12 @@ const Game = ({spectate}) => {
         return (
             <button id="leavebutton" onClick={()=>{
                 if(spectate) {
+                    setGameId(null)
                     setPath('games')
                 }
                 else {
                     axios.patch(`http://localhost:4000/games/${gameState.id}/leave`, {player_id: player.id}).then(res => {
+                    setGameId(null)
                     setPath('games')
                     }).catch(error => console.log(error))
                 }

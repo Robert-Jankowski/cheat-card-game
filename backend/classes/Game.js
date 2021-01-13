@@ -1,6 +1,7 @@
 const { checkIfPreviousPlayerWinning } = require('../helpers/checkIfPreviousPlayerWinning')
 const { skipTurnIfWinner } = require('../helpers/skipTurnIfWinner')
 const { setNewTurn } = require('../helpers/setNewTurn')
+const gamestate = require('../helpers/gamestate')
 
 function Game(id, player, deck) {
     this.id = id
@@ -16,6 +17,13 @@ function Game(id, player, deck) {
     }
     this.winners = []
     this.messages = []
+    this.undo_request = {
+        last_declared: null,
+        request: {
+            counter: null,
+            player: null
+        }
+    }
 
     this.join = (player) => {
         if (this.status !== 'ingame')
@@ -33,6 +41,7 @@ function Game(id, player, deck) {
     this.move = (playerIndex, cards, declared) => {
         this.pile = [...cards, ...this.pile]
         this.players[playerIndex].hand = this.players[playerIndex].hand.filter(n => !cards.includes(n))
+        this.undo_request.last_declared = this.declared
         this.declared = { value: declared, number: cards.length, player: playerIndex }
         setNewTurn(this)
         skipTurnIfWinner(this)
@@ -41,6 +50,7 @@ function Game(id, player, deck) {
 
     this.draw3 = (playerIndex) => {
         this.draw(playerIndex, 3)
+        this.undo_request.last_declared = this.declared
         this.declared = { value: '2', number: null, player: null }
         setNewTurn(this)
         skipTurnIfWinner(this)
@@ -91,6 +101,37 @@ function Game(id, player, deck) {
         if (this.winners.length >= this.players.length - 1 && this.status === 'ingame')
             this.status = 'ended'
 
+    }
+    this.undo = () => {
+        this.turn = this.turn === 0 ? this.players.length - 1 : this.turn - 1
+        this.draw(this.turn, this.declared.number)
+        this.declared = this.undo_request.last_declared
+        this.undo_request.last_declared = null
+        this.undo_request.request = {
+            player: null,
+            counter: null
+        }
+    }
+
+    this.undoRequest = (player) => {
+        this.undo_request.request = {
+            player: player,
+            counter: 0
+        } 
+    }
+    this.vote = (answer) => {
+        if(answer) {
+            this.undo_request.request.counter += 1
+            if(this.undo_request.request.counter === this.players.length - 1) {
+                this.undo()
+            }
+        }     
+        else {
+            this.undo_request.request = {
+                player: null,
+                counter: null
+            }
+        }
     }
 }
 exports.Game = Game

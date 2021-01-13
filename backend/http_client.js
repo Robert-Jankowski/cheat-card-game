@@ -180,6 +180,21 @@ app.get('/chats/:chatId', (req, res) => {
     const response = {id: chat.id, users: chat.users, messages: chat.messages}
     return res.send(response)
 })
+//start undo request
+app.patch('/games/:gameId/undo', (req, res) => {
+    const game = db.games.find(n => n.id === req.params.gameId)
+    game.undoRequest(req.body.player)
+    sendGameStates(game.id)
+    return res.send("success")
+})
+//undo request vote
+app.patch('/games/:gameId/undo/:answer', (req, res) => {
+    const game = db.games.find(n => n.id === req.params.gameId)
+    const answer = req.params.answer === "yes" ? true : false
+    game.vote(answer)
+    sendGameStates(game.id)
+    return res.send("success")
+})
 
 app.listen(port, () => {
   console.log(`HTTP client listening at http://localhost:${port}`)

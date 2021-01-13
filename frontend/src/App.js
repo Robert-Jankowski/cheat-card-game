@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Chat from './components/Chat'
 import Game from './components/Game'
 import Games from './components/Games'
@@ -46,6 +46,8 @@ function App() {
     })
   )
 
+  const [subscribedId, setSubscribedId] = useState(null) 
+
   useEffect(() => {
     client.on('connect', function () {
       console.log(`Connected to broker:${brokerAddress}`)
@@ -74,10 +76,11 @@ function App() {
       setSubscribed({...isSubscribed, game: true})
     }  
     else {
-      client.unsubscribe(`privatestate/${gameId}/${player.id}`)
+      client.unsubscribe(`privatestate/${subscribedId}/${player.id}`)
+      setSubscribedId(null)
       setSubscribed({...isSubscribed, game: false})
     }
-  },[gameId])
+  },[gameId, path])
 
   useEffect(() => {
     
@@ -92,7 +95,7 @@ function App() {
   },[chatId])
 
   useEffect(() => {
-    if(!isSubscribed.game) {
+    if(!isSubscribed.gameSpectated) {
       client.subscribe(`publicstate/${gameSpectatedId}`)
       setSubscribed({...isSubscribed, gameSpectated: true})
     }  
@@ -101,7 +104,7 @@ function App() {
       setSubscribed({...isSubscribed, gameSpectated: false})
     }
     
-  },[gameSpectatedId])
+  },[gameSpectatedId, path])
 
 
   return (

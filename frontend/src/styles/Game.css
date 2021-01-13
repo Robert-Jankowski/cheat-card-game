@@ -250,3 +250,16 @@
     cursor: pointer;
     background-color: #FFA69E;
 }
+#undobutton {
+    padding: 5%;
+}
+#undoform {
+    text-align: center;
+}
+#undoform > button {
+    background-color:  #FF686B;
+    transition: 0.5s;
+}
+#undoform > button:hover {
+    background-color:   #FFA69E;
+}

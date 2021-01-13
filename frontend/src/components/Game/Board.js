@@ -5,6 +5,11 @@ const Board = ({ gameState, player, spectator }) => {
 
     const [selectedCards, setSelectedCards] = useState([])
     const [declared, setDeclared] = useState("2")
+    const [voted, setVoted] = useState(false)
+
+    useEffect(() => {
+        setVoted(false)
+    },[gameState.undo_request.player])
 
         useEffect(() => {
         setSelectedCards([])
@@ -141,6 +146,51 @@ const Board = ({ gameState, player, spectator }) => {
                 <button disabled id="checkbutton" className="disabledgamebuttons">Check</button>
             )
     }
+    const UndoButton = () => {
+        const previousTurn = gameState.turn === 0 ? gameState.players.length - 1 : gameState.turn - 1
+        if(gameState.undo_request.request.player == null &&
+            previousTurn === gameState.players.findIndex(n => n.id === player.id) &&
+            gameState.undo_request.last_declared !== null &&
+            gameState.pile > 1)
+            return(
+                <button className="gamebuttons" onClick={() => {
+                    axios.patch(`http://localhost:4000/games/${gameState.id}/undo`, {player: player})
+                }}>Undo</button>
+            )
+        else
+            return(
+                <button className="disabledgamebuttons" disabled>Undo</button>
+            )
+    }
+
+    const UndoForm = () => {
+
+        function undoButtons () {
+            if(gameState.undo_request.request.player.id !== player.id && !voted)
+                return(
+                    <React.Fragment>
+                    <button id="undobutton" className="votebuttons" onClick={() => {
+                        axios.patch(`http://localhost:4000/games/${gameState.id}/undo/yes`)
+                        setVoted(true)
+                    }}>YES</button>
+                    <button id="undobutton" className="votebuttons" onClick={() => {
+                        axios.patch(`http://localhost:4000/games/${gameState.id}/undo/no`)
+                        setVoted(true)
+                    }}>NO</button>
+                    </React.Fragment> 
+                )
+        }
+
+        return gameState.undo_request.request.player !== null ?
+            (<div id="undoform">
+                <p>UNDO REQUEST</p>
+                <p>{gameState.undo_request.request.counter}/{gameState.players.length - 1}</p>
+                {undoButtons()}
+            </div>) :
+            (<div id="undoform">
+
+            </div>)
+    }
 
     function selectBoard() {
         if(spectator)
@@ -160,6 +210,8 @@ const Board = ({ gameState, player, spectator }) => {
                     <Move />
                     <Draw />
                     <Check />
+                    <UndoButton />
+                    <UndoForm />
                 </React.Fragment>  
             )
     }

@@ -12,7 +12,8 @@ function publicState(game) {
         pile: game.pile.length,
         declared: game.declared,
         winners: game.winners,
-        messages: game.messages
+        messages: game.messages,
+        undo_request: game.undo_request
     }
     return state
 }
@@ -33,7 +34,8 @@ function privateState(game, player_id) {
         pile: game.pile.length,
         declared: game.declared,
         winners: game.winners,
-        messages: game.messages
+        messages: game.messages,
+        undo_request: game.undo_request
     }
     return state
 }
@@ -51,7 +53,8 @@ function adminState(game) {
         pile: game.pile,
         declared: game.declared,
         winners: game.winners,
-        messages: game.messages
+        messages: game.messages,
+        undo_request: game.undo_request
     }
     return state
 }
